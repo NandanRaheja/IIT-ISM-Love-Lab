@@ -1,0 +1,121 @@
+{
+  "project_name": "IIT(ISM) Love Lab",
+  "design_philosophy": {
+    "theme": "Nostalgic Academia meets Digital Romance",
+    "core_vibe": "Campus-coded, Intelligent, Intimate, Witty",
+    "emotional_goal": "Evoke nostalgia and excitement without being cringe",
+    "key_visuals": [
+      "Soft red-brick textures (ISM Heritage)",
+      "Notebook paper styled cards (Student Life)",
+      "Handwritten/Chalk typography accents",
+      "Smooth, cinematic micro-interactions"
+    ]
+  },
+  "typography": {
+    "font_family": {
+      "headings": "Caveat, 'Patrick Hand', cursive",
+      "body": "'DM Sans', 'Inter', sans-serif",
+      "mono": "'JetBrains Mono', monospace"
+    },
+    "scale": {
+      "h1": "text-4xl md:text-6xl font-bold tracking-tight",
+      "h2": "text-3xl md:text-5xl font-semibold",
+      "h3": "text-2xl md:text-3xl font-medium",
+      "body": "text-base md:text-lg leading-relaxed",
+      "caption": "text-sm text-muted-foreground"
+    },
+    "imports": [
+      "https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=DM+Sans:opsz,wght@9..40,400;500;700&family=Patrick+Hand&display=swap"
+    ]
+  },
+  "colors": {
+    "palette": {
+      "background": {
+        "primary": "#FDFBF7",
+        "secondary": "#F5F5F4",
+        "brick_overlay": "rgba(127, 29, 29, 0.9)"
+      },
+      "text": {
+        "primary": "#1C1917",
+        "secondary": "#57534E",
+        "chalk": "#FFFFFF",
+        "ink": "#0F172A"
+      },
+      "brand": {
+        "red": "#E11D48",
+        "red_soft": "#FDA4AF",
+        "brick": "#7F1D1D",
+        "love_pink": "#FFE4E6"
+      },
+      "accent": {
+        "gold": "#F59E0B",
+        "success": "#10B981",
+        "warning": "#F59E0B"
+      }
+    },
+    "gradients": {
+      "love_glow": "radial-gradient(circle at center, rgba(225, 29, 72, 0.15) 0%, rgba(255, 255, 255, 0) 70%)",
+      "brick_vignette": "linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6))"
+    }
+  },
+  "visual_assets": {
+    "textures": {
+      "brick_wall": "https://images.unsplash.com/photo-1713122513782-9f6e50940665?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwyfHxyZWQlMjBicmljayUyMHdhbGwlMjB0ZXh0dXJlJTIwc2VhbWxlc3MlMjBwYXR0ZXJufGVufDB8fHx8MTc3MDkxNDkwN3ww&ixlib=rb-4.1.0&q=85",
+      "paper_crumpled": "https://images.unsplash.com/photo-1617565085015-13cb9d366120?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODh8MHwxfHNlYXJjaHwxfHxjcnVtcGxlZCUyMHdoaXRlJTIwcGFwZXIlMjB0ZXh0dXJlfGVufDB8fHx8MTc3MDkxNDkwOXww&ixlib=rb-4.1.0&q=85",
+      "floating_heart": "https://images.unsplash.com/photo-1707216171962-9f1514c0bda6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzN8MHwxfHNlYXJjaHwxfHxzb2Z0JTIwZmxvYXRpbmclMjBoZWFydHMlMjBwYXJ0aWNsZXMlMjBib2tlaHxlbnwwfHx8fDE3NzA5MTQ5MTB8MA&ixlib=rb-4.1.0&q=85"
+    }
+  },
+  "components": {
+    "layout_structure": {
+      "app_container": "min-h-screen w-full bg-[#7F1D1D] relative overflow-hidden flex flex-col items-center justify-center p-4",
+      "card_container": "w-full max-w-md bg-[#FDFBF7] rounded-xl shadow-2xl relative overflow-hidden min-h-[600px] flex flex-col",
+      "overlay_texture": "absolute inset-0 pointer-events-none opacity-10 bg-[url('https://images.unsplash.com/photo-1617565085015-13cb9d366120?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODh8MHwxfHNlYXJjaHwxfHxjcnVtcGxlZCUyMHdoaXRlJTIwcGFwZXIlMjB0ZXh0dXJlfGVufDB8fHx8MTc3MDkxNDkwOXww&ixlib=rb-4.1.0&q=85')] bg-cover mix-blend-multiply"
+    },
+    "buttons": {
+      "primary": "bg-[#E11D48] text-white hover:bg-[#BE123C] rounded-full px-8 py-3 font-medium transition-all transform hover:scale-105 active:scale-95 shadow-lg",
+      "secondary": "bg-transparent border-2 border-[#E11D48] text-[#E11D48] hover:bg-[#FFF1F2] rounded-full px-8 py-3 font-medium transition-all",
+      "ghost": "text-[#57534E] hover:text-[#1C1917] hover:bg-black/5 rounded-lg px-4 py-2 transition-colors"
+    },
+    "inputs": {
+      "text": "bg-transparent border-b-2 border-[#A8A29E] focus:border-[#E11D48] px-0 py-2 outline-none w-full text-xl font-medium text-[#1C1917] placeholder:text-[#A8A29E] transition-colors",
+      "select": "w-full bg-white border border-[#E5E7EB] rounded-lg px-4 py-3 text-[#1C1917] focus:ring-2 focus:ring-[#E11D48] focus:border-transparent outline-none"
+    },
+    "feedback": {
+      "progress_bar": "h-1 w-full bg-[#E5E7EB] overflow-hidden",
+      "progress_fill": "h-full bg-[#E11D48] transition-all duration-500 ease-out"
+    }
+  },
+  "animation_guidelines": {
+    "principles": [
+      "No laggy animations - use transform/opacity only",
+      "Staggered entrances for list items",
+      "Soft spring physics for interactions"
+    ],
+    "transitions": {
+      "page_transition": "initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4, ease: 'easeOut' }}",
+      "hover_lift": "hover={{ y: -2 }} transition={{ duration: 0.2 }}"
+    }
+  },
+  "accessibility": {
+    "contrast": "Ensure text on red brick background has shadow or overlay. Use WCAG AA standards.",
+    "reduced_motion": "Respect prefers-reduced-motion media query.",
+    "aria": "All interactive elements must have aria-labels if icon-only."
+  },
+  "testing": {
+    "requirement": "All interactive elements MUST include data-testid attributes",
+    "format": "kebab-case description of element purpose"
+  },
+  "instructions_to_main_agent": [
+    "INSTALL: 'framer-motion' for all animations.",
+    "INSTALL: 'clsx' and 'tailwind-merge' for class handling.",
+    "SETUP: Add the Google Fonts link to the head of index.html immediately.",
+    "LAYOUT: Wrap the main app in a container that applies the Red Brick background image with a dark overlay for readability.",
+    "COMPONENT: Create a reusable 'NotebookCard' component that acts as the main white paper container.",
+    "STYLE: Use 'Caveat' font for all H1, H2 headers and 'Love Lab' branding. Use 'DM Sans' for body text and form inputs.",
+    "MICRO-INTERACTION: Add a subtle 'heart float' animation when a user selects an answer.",
+    "CRITICAL: Ensure the app is mobile-responsive. The card should take up most of the screen on mobile but have padding on desktop.",
+    "DATA: Mock the backend calls for now, but structure the data aggregation logic clearly.",
+    "MODERATION: Implement a simple bad-word filter list for the confession wall.",
+    "IMAGES: Use the provided texture URLs for backgrounds. Do not use placeholders."
+  ]
+}
