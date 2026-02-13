@@ -362,13 +362,15 @@ const CoupleQuestionnaire = () => {
                   ))}
                 </div>
               ) : (
-                <textarea
-                  data-testid="text-input"
-                  value={answers[currentQuestion.id]}
-                  onChange={(e) => setAnswers({...answers, [currentQuestion.id]: e.target.value})}
-                  placeholder={currentQuestion.placeholder}
-                  className="w-full bg-transparent border-b-2 border-[#A8A29E] focus:border-[#E11D48] px-0 py-3 outline-none text-lg text-[#1C1917] placeholder:text-[#A8A29E] transition-colors resize-none min-h-[120px]"
-                />
+                <div className="bg-white p-6 rounded-xl border-2 border-[#E5E7EB] focus-within:border-[#E11D48] transition-all shadow-sm">
+                  <textarea
+                    data-testid="text-input"
+                    value={answers[currentQuestion.id]}
+                    onChange={(e) => setAnswers({...answers, [currentQuestion.id]: e.target.value})}
+                    placeholder={currentQuestion.placeholder}
+                    className="w-full bg-transparent border-0 px-0 py-0 outline-none text-lg text-[#1C1917] placeholder:text-[#A8A29E] resize-none min-h-[120px]"
+                  />
+                </div>
               )}
             </motion.div>
           </div>
