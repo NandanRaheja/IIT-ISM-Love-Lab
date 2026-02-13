@@ -125,6 +125,29 @@ const CampusIdentity = () => {
           <div className="space-y-6 flex-1">
             <div>
               <label className="block text-sm font-medium text-[#1C1917] mb-2">
+                🎬 Choose Your Film Genre <span className="text-[#E11D48]">*</span>
+              </label>
+              <select
+                data-testid="department-select"
+                value={identity.department}
+                onChange={(e) => setIdentity({...identity, department: e.target.value})}
+                className="w-full bg-white/80 backdrop-blur-sm border-2 border-[#E5E7EB] rounded-2xl px-4 py-4 text-[#1C1917] font-medium focus:ring-2 focus:ring-[#E11D48] focus:border-[#E11D48] focus:shadow-lg focus:shadow-[#E11D48]/20 outline-none transition-all duration-300"
+              >
+                <option value="" className="text-[#A8A29E]">Select your genre...</option>
+                {departments.map(dept => (
+                  <option 
+                    key={dept.branch} 
+                    value={dept.branch}
+                    className="text-[#1C1917] py-3"
+                  >
+                    {dept.short} - {dept.genre}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-[#1C1917] mb-2">
                 🎬 Which Part of the Movie Are You In? <span className="text-[#E11D48]">*</span>
               </label>
               <select
@@ -159,29 +182,6 @@ const CampusIdentity = () => {
                 <option value="" className="text-[#A8A29E]">Select your location...</option>
                 {hostels.map(h => (
                   <option key={h} value={h} className="text-[#1C1917]">{h}</option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-[#1C1917] mb-2">
-                🎬 Choose Your Film Genre <span className="text-[#E11D48]">*</span>
-              </label>
-              <select
-                data-testid="department-select"
-                value={identity.department}
-                onChange={(e) => setIdentity({...identity, department: e.target.value})}
-                className="w-full bg-white/80 backdrop-blur-sm border-2 border-[#E5E7EB] rounded-2xl px-4 py-4 text-[#1C1917] font-medium focus:ring-2 focus:ring-[#E11D48] focus:border-[#E11D48] focus:shadow-lg focus:shadow-[#E11D48]/20 outline-none transition-all duration-300"
-              >
-                <option value="" className="text-[#A8A29E]">Select your genre...</option>
-                {departments.map(dept => (
-                  <option 
-                    key={dept.branch} 
-                    value={dept.branch}
-                    className="text-[#1C1917] py-3"
-                  >
-                    {dept.short} - {dept.genre}
-                  </option>
                 ))}
               </select>
             </div>
