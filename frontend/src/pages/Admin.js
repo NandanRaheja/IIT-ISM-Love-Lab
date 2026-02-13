@@ -72,9 +72,11 @@ const Admin = () => {
             <h2 className="handwritten text-3xl font-bold text-[#1C1917] mb-4">
               Admin Dashboard
             </h2>
-            <p className="text-[#57534E] mb-6 text-center text-sm">
-              Confession moderation and statistics
-            </p>
+            <div className="bg-white px-6 py-3 rounded-lg shadow-sm mb-6">
+              <p className="text-[#1C1917] text-center text-sm">
+                Confession moderation and statistics
+              </p>
+            </div>
             <input
               type="password"
               data-testid="admin-password"
