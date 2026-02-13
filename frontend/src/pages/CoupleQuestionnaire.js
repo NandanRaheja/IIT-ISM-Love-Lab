@@ -42,7 +42,8 @@ const CoupleQuestionnaire = () => {
     {
       id: 'survived',
       title: 'Your relationship survived:',
-      type: 'choice',
+      subtitle: 'Select all that apply',
+      type: 'multi_choice',
       options: ['Assignment deadline week', 'Mid-sem exam season', 'Intern season', 'Project submission chaos', 'Placement anxiety']
     },
     {
@@ -127,8 +128,24 @@ const CoupleQuestionnaire = () => {
     triggerEmojiExplosion();
   };
 
+  const handleMultiSelect = (value) => {
+    const currentSelections = answers[currentQuestion.id] || [];
+    let newSelections;
+    
+    if (currentSelections.includes(value)) {
+      newSelections = currentSelections.filter(v => v !== value);
+    } else {
+      newSelections = [...currentSelections, value];
+      triggerEmojiExplosion();
+    }
+    
+    setAnswers({...answers, [currentQuestion.id]: newSelections});
+  };
+
   const handleNext = () => {
-    if (!answers[currentQuestion.id]) {
+    const answer = answers[currentQuestion.id];
+    
+    if (!answer || (Array.isArray(answer) && answer.length === 0)) {
       alert('Please answer the question');
       return;
     }
@@ -207,11 +224,56 @@ const CoupleQuestionnaire = () => {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="handwritten text-3xl md:text-4xl font-bold text-[#1C1917] mb-8">
+              <h2 className="handwritten text-3xl md:text-4xl font-bold text-[#1C1917] mb-2">
                 {currentQuestion.title}
               </h2>
+              {currentQuestion.subtitle && (
+                <p className="text-sm text-[#57534E] mb-6 italic">{currentQuestion.subtitle}</p>
+              )}
 
-              {currentQuestion.type === 'choice' ? (
+              {currentQuestion.type === 'multi_choice' ? (
+                <div className="space-y-3">
+                  {currentQuestion.options.map(option => {
+                    const isSelected = (answers[currentQuestion.id] || []).includes(option);
+                    return (
+                      <motion.button
+                        key={option}
+                        data-testid={`option-${option.toLowerCase().replace(/\s+/g, '-')}`}
+                        onClick={() => handleMultiSelect(option)}
+                        whileHover={{ scale: 1.02, y: -2 }}
+                        whileTap={{ scale: 0.98 }}
+                        animate={
+                          isSelected
+                            ? {
+                                scale: [1, 1.05, 1],
+                                transition: { duration: 0.3 }
+                              }
+                            : {}
+                        }
+                        className={`w-full text-left py-4 px-6 rounded-xl border-2 transition-all ${
+                          isSelected
+                            ? 'border-[#E11D48] bg-[#FFF1F2] text-[#E11D48] font-medium shadow-lg shadow-[#E11D48]/20'
+                            : 'border-[#E5E7EB] hover:border-[#E11D48] text-[#57534E] bg-white'
+                        }`}
+                      >
+                        <span className="flex items-center justify-between">
+                          {option}
+                          {isSelected && (
+                            <motion.span
+                              initial={{ scale: 0, rotate: -180 }}
+                              animate={{ scale: 1, rotate: 0 }}
+                              transition={{ type: "spring", stiffness: 200 }}
+                              className="text-2xl"
+                            >
+                              ✅
+                            </motion.span>
+                          )}
+                        </span>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              ) : currentQuestion.type === 'choice' ? (
                 <div className="space-y-3">
                   {currentQuestion.options.map(option => (
                     <motion.button
