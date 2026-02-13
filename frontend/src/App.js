@@ -9,6 +9,7 @@ import SingleQuestionnaire from './pages/SingleQuestionnaire';
 import Results from './pages/Results';
 import Leaderboards from './pages/Leaderboards';
 import Confessions from './pages/Confessions';
+import Admin from './pages/Admin';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/results" element={<Results />} />
           <Route path="/leaderboards" element={<Leaderboards />} />
           <Route path="/confessions" element={<Confessions />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </BrowserRouter>
     </div>
