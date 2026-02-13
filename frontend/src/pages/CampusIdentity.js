@@ -10,7 +10,6 @@ const CampusIdentity = () => {
   const mode = sessionStorage.getItem('mode');
   
   const [identity, setIdentity] = useState({
-    batch: '',
     hostel: '',
     department: ''
   });
@@ -86,7 +85,7 @@ const CampusIdentity = () => {
   ];
 
   const handleNext = () => {
-    if (!identity.batch || !identity.hostel || !identity.department) {
+    if (!identity.hostel || !identity.department) {
       alert('Please fill all fields');
       return;
     }
@@ -117,28 +116,6 @@ const CampusIdentity = () => {
           </div>
 
           <div className="space-y-6 flex-1">
-            <div>
-              <label className="block text-sm font-medium text-[#1C1917] mb-2">
-                Batch <span className="text-[#E11D48]">*</span>
-              </label>
-              <div className="grid grid-cols-2 gap-3">
-                {batches.map(batch => (
-                  <button
-                    key={batch}
-                    data-testid={`batch-${batch.toLowerCase().replace(/\//g, '-').replace(/\./g, '')}`}
-                    onClick={() => setIdentity({...identity, batch})}
-                    className={`py-4 px-4 rounded-lg border-2 transition-all text-sm ${
-                      identity.batch === batch
-                        ? 'border-[#E11D48] bg-[#FFF1F2] text-[#E11D48] font-medium'
-                        : 'border-[#E5E7EB] bg-white hover:border-[#E11D48] text-[#57534E] font-medium'
-                    }`}
-                  >
-                    {batch}
-                  </button>
-                ))}
-              </div>
-            </div>
-
             <div>
               <label className="block text-sm font-medium text-[#1C1917] mb-2">
                 Hostel <span className="text-[#E11D48]">*</span>

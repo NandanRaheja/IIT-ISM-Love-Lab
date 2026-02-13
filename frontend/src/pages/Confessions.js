@@ -18,7 +18,6 @@ const Confessions = () => {
   const [showWordCloud, setShowWordCloud] = useState(false);
   const [newConfession, setNewConfession] = useState('');
   const [identity, setIdentity] = useState({
-    batch: '',
     hostel: '',
     department: ''
   });
@@ -49,7 +48,7 @@ const Confessions = () => {
   };
 
   const submitConfession = async () => {
-    if (!newConfession.trim() || !identity.batch || !identity.hostel || !identity.department) {
+    if (!newConfession.trim() || !identity.hostel || !identity.department) {
       alert('Please fill all fields');
       return;
     }
@@ -175,23 +174,6 @@ const Confessions = () => {
                   placeholder="Share your anonymous confession..."
                   className="w-full bg-white border-2 border-[#E5E7EB] rounded-lg px-4 py-3 text-[#1C1917] focus:ring-2 focus:ring-[#E11D48] focus:border-transparent outline-none resize-none min-h-[100px]"
                 />
-
-                <div className="grid grid-cols-2 gap-2">
-                  {batches.map(batch => (
-                    <button
-                      key={batch}
-                      data-testid={`batch-${batch.toLowerCase().replace(/\//g, '-').replace(/\./g, '')}`}
-                      onClick={() => setIdentity({...identity, batch})}
-                      className={`py-2 px-3 text-sm rounded-lg border-2 transition-all ${
-                        identity.batch === batch
-                          ? 'border-[#E11D48] bg-[#FFF1F2] text-[#E11D48] font-medium'
-                          : 'border-[#E5E7EB] hover:border-[#E11D48] text-[#57534E] font-medium bg-white'
-                      }`}
-                    >
-                      {batch}
-                    </button>
-                  ))}
-                </div>
 
                 <select
                   data-testid="hostel-select"
