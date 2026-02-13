@@ -72,7 +72,21 @@ const Confessions = () => {
 
   const batches = ['B.Tech./Int.M.Tech.', 'M.Tech', 'M.Sc Tech', 'MBA'];
   const hostels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
-  const departments = ['CSE', 'ECE', 'EE', 'Mechanical', 'Civil', 'Mining', 'Chemical', 'Petroleum'];
+  const departments = [
+    { genre: 'Tech Romance Thriller', branch: 'Computer Science & Engineering' },
+    { genre: 'Analytical Romantic Drama', branch: 'Mathematics & Computing' },
+    { genre: 'Intense Energy Saga', branch: 'Electrical Engineering' },
+    { genre: 'Signal & Silence Story', branch: 'Electronics & Communication Engineering' },
+    { genre: 'Slow-Burn Love Story', branch: 'Civil Engineering' },
+    { genre: 'Action Hero With Soft Corner', branch: 'Mechanical Engineering' },
+    { genre: 'Deep & Dramatic Epic', branch: 'Mining Engineering' },
+    { genre: 'Heavy Metal Romance', branch: 'Mining Machinery Engineering' },
+    { genre: 'Experimental Love Story', branch: 'Chemical Engineering' },
+    { genre: 'Earth & Emotions Chronicle', branch: 'Applied Geology' },
+    { genre: 'Seismic Heartbeat Saga', branch: 'Applied Geophysics' },
+    { genre: 'Environmental Parallel Cinema', branch: 'Environmental Engineering' },
+    { genre: 'Physics-Based Love Theory', branch: 'Engineering Physics' }
+  ];
 
   return (
     <Layout>
@@ -193,10 +207,12 @@ const Confessions = () => {
                   data-testid="department-select"
                   value={identity.department}
                   onChange={(e) => setIdentity({...identity, department: e.target.value})}
-                  className="w-full bg-white border-2 border-[#E5E7EB] rounded-lg px-4 py-2 text-sm"
+                  className="w-full bg-white/80 backdrop-blur-sm border-2 border-[#E5E7EB] rounded-xl px-4 py-2 text-sm text-[#57534E] font-medium focus:ring-2 focus:ring-[#E11D48] outline-none"
                 >
-                  <option value="">Select department</option>
-                  {departments.map(d => <option key={d} value={d}>{d}</option>)}
+                  <option value="" className="text-[#A8A29E]">Select genre</option>
+                  {departments.map(d => (
+                    <option key={d.branch} value={d.branch} className="text-[#57534E]">{d.genre}</option>
+                  ))}
                 </select>
 
                 <button
