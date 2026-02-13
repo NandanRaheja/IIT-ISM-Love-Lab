@@ -15,6 +15,27 @@ const Leaderboards = () => {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('batch');
 
+  // Department name mapping
+  const departmentShortNames = {
+    'Computer Science & Engineering': 'CSE',
+    'Mathematics & Computing': 'MnC',
+    'Electrical Engineering': 'EE',
+    'Electronics & Communication Engineering': 'ECE',
+    'Civil Engineering': 'CE',
+    'Mechanical Engineering': 'ME',
+    'Mining Engineering': 'Mining',
+    'Mining Machinery Engineering': 'MME',
+    'Chemical Engineering': 'CHE',
+    'Applied Geology': 'AGL',
+    'Applied Geophysics': 'AGP',
+    'Environmental Engineering': 'ENV',
+    'Engineering Physics': 'EP'
+  };
+
+  const getDepartmentShortName = (fullName) => {
+    return departmentShortNames[fullName] || fullName;
+  };
+
   useEffect(() => {
     fetchLeaderboards();
   }, []);
