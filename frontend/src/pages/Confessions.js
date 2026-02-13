@@ -87,14 +87,25 @@ const Confessions = () => {
             </p>
           </div>
 
-          <button
-            data-testid="add-confession-button"
-            onClick={() => setShowForm(!showForm)}
-            className="w-full mb-6 bg-[#E11D48] text-white hover:bg-[#BE123C] rounded-full px-6 py-3 font-medium transition-all transform hover:scale-105 active:scale-95 shadow-lg flex items-center justify-center gap-2"
-          >
-            <Send className="w-5 h-5" />
-            {showForm ? 'Cancel' : 'Add Confession'}
-          </button>
+          <div className="flex gap-2 mb-6">
+            <button
+              data-testid="add-confession-button"
+              onClick={() => { setShowForm(!showForm); setShowWordCloud(false); }}
+              className="flex-1 bg-[#E11D48] text-white hover:bg-[#BE123C] rounded-full px-6 py-3 font-medium transition-all transform hover:scale-105 active:scale-95 shadow-lg flex items-center justify-center gap-2"
+            >
+              <Send className="w-5 h-5" />
+              {showForm ? 'Cancel' : 'Add'}
+            </button>
+            
+            <button
+              data-testid="wordcloud-button"
+              onClick={() => { setShowWordCloud(!showWordCloud); setShowForm(false); }}
+              className="flex-1 bg-transparent border-2 border-[#E11D48] text-[#E11D48] hover:bg-[#FFF1F2] rounded-full px-6 py-3 font-medium transition-all flex items-center justify-center gap-2"
+            >
+              <Cloud className="w-5 h-5" />
+              Word Cloud
+            </button>
+          </div>
 
           <AnimatePresence>
             {showWordCloud && (
