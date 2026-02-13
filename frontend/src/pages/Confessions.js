@@ -73,19 +73,19 @@ const Confessions = () => {
   const batches = ['B.Tech./Int.M.Tech.', 'M.Tech', 'M.Sc Tech', 'MBA'];
   const hostels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
   const departments = [
-    { genre: 'Tech Romance Thriller', branch: 'Computer Science & Engineering' },
-    { genre: 'Analytical Romantic Drama', branch: 'Mathematics & Computing' },
-    { genre: 'Intense Energy Saga', branch: 'Electrical Engineering' },
-    { genre: 'Signal & Silence Story', branch: 'Electronics & Communication Engineering' },
-    { genre: 'Slow-Burn Love Story', branch: 'Civil Engineering' },
-    { genre: 'Action Hero With Soft Corner', branch: 'Mechanical Engineering' },
-    { genre: 'Deep & Dramatic Epic', branch: 'Mining Engineering' },
-    { genre: 'Heavy Metal Romance', branch: 'Mining Machinery Engineering' },
-    { genre: 'Experimental Love Story', branch: 'Chemical Engineering' },
-    { genre: 'Earth & Emotions Chronicle', branch: 'Applied Geology' },
-    { genre: 'Seismic Heartbeat Saga', branch: 'Applied Geophysics' },
-    { genre: 'Environmental Parallel Cinema', branch: 'Environmental Engineering' },
-    { genre: 'Physics-Based Love Theory', branch: 'Engineering Physics' }
+    { short: 'CSE', genre: 'Tech Romance Thriller', branch: 'Computer Science & Engineering' },
+    { short: 'MnC', genre: 'Analytical Romantic Drama', branch: 'Mathematics & Computing' },
+    { short: 'EE', genre: 'Intense Energy Saga', branch: 'Electrical Engineering' },
+    { short: 'ECE', genre: 'Signal & Silence Story', branch: 'Electronics & Communication Engineering' },
+    { short: 'CE', genre: 'Slow-Burn Love Story', branch: 'Civil Engineering' },
+    { short: 'ME', genre: 'Action Hero With Soft Corner', branch: 'Mechanical Engineering' },
+    { short: 'MN', genre: 'Deep & Dramatic Epic', branch: 'Mining Engineering' },
+    { short: 'MME', genre: 'Heavy Metal Romance', branch: 'Mining Machinery Engineering' },
+    { short: 'CHE', genre: 'Experimental Love Story', branch: 'Chemical Engineering' },
+    { short: 'AG', genre: 'Earth & Emotions Chronicle', branch: 'Applied Geology' },
+    { short: 'AGP', genre: 'Seismic Heartbeat Saga', branch: 'Applied Geophysics' },
+    { short: 'ENV', genre: 'Environmental Parallel Cinema', branch: 'Environmental Engineering' },
+    { short: 'EP', genre: 'Physics-Based Love Theory', branch: 'Engineering Physics' }
   ];
 
   return (
@@ -207,11 +207,13 @@ const Confessions = () => {
                   data-testid="department-select"
                   value={identity.department}
                   onChange={(e) => setIdentity({...identity, department: e.target.value})}
-                  className="w-full bg-white/80 backdrop-blur-sm border-2 border-[#E5E7EB] rounded-xl px-4 py-2 text-sm text-[#57534E] font-medium focus:ring-2 focus:ring-[#E11D48] outline-none"
+                  className="w-full bg-white/80 backdrop-blur-sm border-2 border-[#E5E7EB] rounded-xl px-4 py-2 text-sm text-[#1C1917] font-medium focus:ring-2 focus:ring-[#E11D48] outline-none"
                 >
                   <option value="" className="text-[#A8A29E]">Select genre</option>
                   {departments.map(d => (
-                    <option key={d.branch} value={d.branch} className="text-[#57534E]">{d.genre}</option>
+                    <option key={d.branch} value={d.branch} className="text-[#1C1917]">
+                      {d.short} - {d.genre}
+                    </option>
                   ))}
                 </select>
 
