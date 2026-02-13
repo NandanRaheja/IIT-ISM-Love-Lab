@@ -22,7 +22,7 @@ const CampusIdentity = () => {
     { number: '4', title: 'Pre-Climax Realisation', year: '4th Year' },
     { number: '5', title: 'Grand Finale Season', year: '5th Year / Dual Degree' }
   ];
-  const hostels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
+  const hostels = ['Amber', 'Diamond', 'Jasper', 'Sapphire', 'Topaz', 'Emerald', 'Aquamarine', 'Rosaline', 'Ruby', 'Opal'];
   const departments = [
     {
       short: 'CSE',

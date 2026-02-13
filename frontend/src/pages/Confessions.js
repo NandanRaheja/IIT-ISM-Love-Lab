@@ -79,7 +79,7 @@ const Confessions = () => {
   };
 
   const batches = ['B.Tech./Int.M.Tech.', 'M.Tech', 'M.Sc Tech', 'MBA'];
-  const hostels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
+  const hostels = ['Amber', 'Diamond', 'Jasper', 'Sapphire', 'Topaz', 'Emerald', 'Aquamarine', 'Rosaline', 'Ruby', 'Opal'];
   const departments = [
     { short: 'CSE', genre: 'Tech Romance Thriller', branch: 'Computer Science & Engineering' },
     { short: 'MnC', genre: 'Analytical Romantic Drama', branch: 'Mathematics & Computing' },
@@ -204,8 +204,8 @@ const Confessions = () => {
                   onChange={(e) => setIdentity({...identity, hostel: e.target.value})}
                   className="w-full bg-white border-2 border-[#E5E7EB] rounded-lg px-4 py-2 text-sm"
                 >
-                  <option value="">Select hostel</option>
-                  {hostels.map(h => <option key={h} value={h}>Hostel {h}</option>)}
+                  <option value="">Select location</option>
+                  {hostels.map(h => <option key={h} value={h}>{h}</option>)}
                 </select>
 
                 <select
