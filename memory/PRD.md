@@ -24,10 +24,12 @@ Create a hyper-personalized, anonymous, emotionally intelligent Valentine's expe
 - Live word cloud
 - Anonymous confession wall
 - Countdown timer
+- **Partner Link Sharing** (NEW)
 
 ## Shareable Content
 - Cinematic film poster
 - Final elegant result card for social sharing
+- Partner compatibility link
 
 ---
 
@@ -42,9 +44,11 @@ Create a hyper-personalized, anonymous, emotionally intelligent Valentine's expe
 - [x] Multi-select survival question
 - [x] Admin page UI for confession moderation
 - [x] Backend endpoints for submissions and confessions
-- [x] **Download functionality** (poster & results) - Feb 13, 2026
-- [x] **WhatsApp sharing** - Feb 13, 2026
-- [x] **Instagram sharing** - Feb 13, 2026
+- [x] **Partner Link Feature** - Feb 13, 2026
+  - Partner A creates shareable link after questionnaire
+  - Partner B joins via link and answers same questions
+  - System compares answers and shows compatibility score
+  - Shows matches and mismatches in detail
 
 ### In Progress / Blocked 🔴
 - [ ] **P0**: "Failed to load insights" bug on submission (CRITICAL BLOCKER)
@@ -64,24 +68,34 @@ Create a hyper-personalized, anonymous, emotionally intelligent Valentine's expe
 ---
 
 ## Technical Stack
-- **Frontend**: React, React Router, Tailwind CSS, Framer Motion, html2canvas
+- **Frontend**: React, React Router, Tailwind CSS, Framer Motion
 - **Backend**: FastAPI, Pydantic
 - **Database**: MongoDB
 - **AI**: Claude Sonnet 4.5 (Emergent LLM Key)
 
 ## Key Files
-- `/app/backend/server.py` - All API logic, Pydantic models, AI prompts
-- `/app/frontend/src/pages/Questionnaire.js` - Questionnaire flow
-- `/app/frontend/src/pages/PosterGenerator.js` - Film poster + sharing
-- `/app/frontend/src/pages/Results.js` - Results display + sharing
-- `/app/frontend/src/questions.js` - Question definitions
+- `/app/backend/server.py` - All API logic, Pydantic models, AI prompts, Partner Link endpoints
+- `/app/frontend/src/pages/CoupleQuestionnaire.js` - Couple questionnaire flow with partner link creation
+- `/app/frontend/src/pages/PartnerLink.js` - Partner link share/join/results page
+- `/app/frontend/src/pages/PosterGenerator.js` - Film poster display
+- `/app/frontend/src/pages/Results.js` - Results display
+- `/app/frontend/src/App.js` - Route definitions
 
 ## API Endpoints
-- `POST /api/submissions` - Submit questionnaire (currently failing)
-- `GET /api/confessions` - Fetch confessions
-- `PUT /api/confessions/{id}/approve` - Approve confession
+- `POST /api/responses/couple` - Submit couple questionnaire
+- `POST /api/responses/single` - Submit single questionnaire
+- `POST /api/generate-insights` - Generate AI insights (currently failing)
+- `POST /api/partner-link/create` - Create shareable partner link
+- `GET /api/partner-link/{id}` - Check link status
+- `POST /api/partner-link/join` - Partner B submits answers
+- `GET /api/partner-link/{id}/results` - Get match results
 
 ---
 
 ## Changelog
-- **Feb 13, 2026**: Implemented Download, WhatsApp, Instagram sharing on PosterGenerator and Results pages
+- **Feb 13, 2026**: Implemented Partner Link sharing feature
+  - Backend: 4 new endpoints for partner session management
+  - Frontend: New PartnerLink page with share/join/results views
+  - Modified CoupleQuestionnaire to create partner links on submit
+  - Modified CampusIdentity to handle partner join flow
+- **Feb 13, 2026**: Removed Download, WhatsApp, Instagram buttons from poster/results pages
