@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import Layout from '../components/Layout';
 import NotebookCard from '../components/NotebookCard';
@@ -12,6 +12,8 @@ const API = `${BACKEND_URL}/api`;
 const CoupleQuestionnaire = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [emojiParticles, setEmojiParticles] = useState([]);
   const [answers, setAnswers] = useState({
     survived: '',
     story_began: '',
@@ -100,6 +102,31 @@ const CoupleQuestionnaire = () => {
 
   const currentQuestion = questions[currentStep];
 
+  const triggerEmojiExplosion = () => {
+    const emojis = ['💕', '💖', '✨', '💫', '🌟', '💝', '🎉', '🎊'];
+    const newParticles = Array.from({ length: 12 }, (_, i) => ({
+      id: Date.now() + i,
+      emoji: emojis[Math.floor(Math.random() * emojis.length)],
+      x: Math.random() * 100,
+      y: 50,
+      rotation: Math.random() * 360,
+      delay: i * 0.05
+    }));
+    
+    setEmojiParticles(newParticles);
+    setShowConfetti(true);
+    
+    setTimeout(() => {
+      setEmojiParticles([]);
+      setShowConfetti(false);
+    }, 1500);
+  };
+
+  const handleOptionSelect = (value) => {
+    setAnswers({...answers, [currentQuestion.id]: value});
+    triggerEmojiExplosion();
+  };
+
   const handleNext = () => {
     if (!answers[currentQuestion.id]) {
       alert('Please answer the question');
@@ -140,6 +167,38 @@ const CoupleQuestionnaire = () => {
         <div className="flex-1 flex flex-col">
           <ProgressBar current={currentStep + 1} total={questions.length} />
           
+          {/* Emoji Particles */}
+          <AnimatePresence>
+            {showConfetti && emojiParticles.map(particle => (
+              <motion.div
+                key={particle.id}
+                initial={{ 
+                  opacity: 1, 
+                  scale: 0,
+                  x: `${particle.x}%`,
+                  y: '50%'
+                }}
+                animate={{ 
+                  opacity: 0,
+                  scale: [1, 1.5, 0.5],
+                  x: `${particle.x + (Math.random() - 0.5) * 30}%`,
+                  y: ['-20%', '-80%'],
+                  rotate: particle.rotation
+                }}
+                exit={{ opacity: 0 }}
+                transition={{ 
+                  duration: 1.5,
+                  delay: particle.delay,
+                  ease: "easeOut"
+                }}
+                className="fixed text-4xl pointer-events-none z-50"
+                style={{ left: 0, top: '50%' }}
+              >
+                {particle.emoji}
+              </motion.div>
+            ))}
+          </AnimatePresence>
+          
           <div className="flex-1">
             <motion.div
               key={currentStep}
@@ -155,33 +214,74 @@ const CoupleQuestionnaire = () => {
               {currentQuestion.type === 'choice' ? (
                 <div className="space-y-3">
                   {currentQuestion.options.map(option => (
-                    <button
+                    <motion.button
                       key={option}
                       data-testid={`option-${option.toLowerCase().replace(/\s+/g, '-')}`}
-                      onClick={() => setAnswers({...answers, [currentQuestion.id]: option})}
+                      onClick={() => handleOptionSelect(option)}
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      animate={
+                        answers[currentQuestion.id] === option
+                          ? {
+                              scale: [1, 1.05, 1],
+                              transition: { duration: 0.3 }
+                            }
+                          : {}
+                      }
                       className={`w-full text-left py-4 px-6 rounded-xl border-2 transition-all ${
                         answers[currentQuestion.id] === option
-                          ? 'border-[#E11D48] bg-[#FFF1F2] text-[#E11D48] font-medium'
-                          : 'border-[#E5E7EB] hover:border-[#E11D48] text-[#57534E]'
+                          ? 'border-[#E11D48] bg-[#FFF1F2] text-[#E11D48] font-medium shadow-lg shadow-[#E11D48]/20'
+                          : 'border-[#E5E7EB] hover:border-[#E11D48] text-[#57534E] bg-white'
                       }`}
                     >
-                      {option}
-                    </button>
+                      <span className="flex items-center justify-between">
+                        {option}
+                        {answers[currentQuestion.id] === option && (
+                          <motion.span
+                            initial={{ scale: 0, rotate: -180 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            transition={{ type: "spring", stiffness: 200 }}
+                            className="text-2xl"
+                          >
+                            💕
+                          </motion.span>
+                        )}
+                      </span>
+                    </motion.button>
                   ))}
                 </div>
               ) : currentQuestion.type === 'choice_detailed' ? (
                 <div className="space-y-4">
                   {currentQuestion.options.map((option, index) => (
-                    <button
+                    <motion.button
                       key={index}
                       data-testid={`option-${option.heading.toLowerCase().replace(/\s+/g, '-')}`}
-                      onClick={() => setAnswers({...answers, [currentQuestion.id]: option.heading})}
-                      className={`w-full text-left p-6 rounded-xl border-2 transition-all bg-white ${
+                      onClick={() => handleOptionSelect(option.heading)}
+                      whileHover={{ scale: 1.02, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      animate={
                         answers[currentQuestion.id] === option.heading
-                          ? 'border-[#E11D48] shadow-lg shadow-[#E11D48]/20'
-                          : 'border-[#E5E7EB] hover:border-[#E11D48] hover:shadow-md'
+                          ? {
+                              scale: [1, 1.05, 1],
+                              transition: { duration: 0.3 }
+                            }
+                          : {}
+                      }
+                      className={`w-full text-left p-6 rounded-xl border-2 transition-all relative overflow-hidden ${
+                        answers[currentQuestion.id] === option.heading
+                          ? 'border-[#E11D48] bg-gradient-to-r from-[#FFF1F2] to-[#FFE4E6] shadow-lg shadow-[#E11D48]/20'
+                          : 'border-[#E5E7EB] hover:border-[#E11D48] hover:shadow-md bg-white'
                       }`}
                     >
+                      {answers[currentQuestion.id] === option.heading && (
+                        <motion.div
+                          initial={{ scale: 0, x: '100%' }}
+                          animate={{ scale: 1, x: 0 }}
+                          className="absolute top-4 right-4 text-3xl"
+                        >
+                          ✨
+                        </motion.div>
+                      )}
                       <div className={`text-lg font-semibold mb-1 ${
                         answers[currentQuestion.id] === option.heading
                           ? 'text-[#E11D48]'
@@ -196,7 +296,7 @@ const CoupleQuestionnaire = () => {
                       }`}>
                         {option.subtitle}
                       </div>
-                    </button>
+                    </motion.button>
                   ))}
                 </div>
               ) : (
