@@ -70,7 +70,7 @@ const Confessions = () => {
     }
   };
 
-  const batches = ['1st', '2nd', '3rd', '4th', 'Dual', 'MTech'];
+  const batches = ['B.Tech./Int.M.Tech.', 'M.Tech', 'M.Sc Tech', 'MBA'];
   const hostels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
   const departments = ['CSE', 'ECE', 'EE', 'Mechanical', 'Civil', 'Mining', 'Chemical', 'Petroleum'];
 
@@ -162,16 +162,16 @@ const Confessions = () => {
                   className="w-full bg-white border-2 border-[#E5E7EB] rounded-lg px-4 py-3 text-[#1C1917] focus:ring-2 focus:ring-[#E11D48] focus:border-transparent outline-none resize-none min-h-[100px]"
                 />
 
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   {batches.map(batch => (
                     <button
                       key={batch}
-                      data-testid={`batch-${batch.toLowerCase()}`}
+                      data-testid={`batch-${batch.toLowerCase().replace(/\//g, '-').replace(/\./g, '')}`}
                       onClick={() => setIdentity({...identity, batch})}
                       className={`py-2 px-3 text-sm rounded-lg border-2 transition-all ${
                         identity.batch === batch
-                          ? 'border-[#E11D48] bg-[#FFF1F2] text-[#E11D48]'
-                          : 'border-[#E5E7EB] hover:border-[#E11D48]'
+                          ? 'border-[#E11D48] bg-[#FFF1F2] text-[#E11D48] font-medium'
+                          : 'border-[#E5E7EB] hover:border-[#E11D48] text-[#57534E] font-medium bg-white'
                       }`}
                     >
                       {batch}
