@@ -1,11 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Layout from '../components/Layout';
 
 const PosterGenerator = () => {
   const navigate = useNavigate();
-  const posterRef = useRef(null);
   const [poster, setPoster] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -175,72 +174,6 @@ const PosterGenerator = () => {
     });
     
     setLoading(false);
-  };
-
-  const downloadPoster = async () => {
-    if (posterRef.current) {
-      const canvas = await html2canvas(posterRef.current, {
-        backgroundColor: null,
-        scale: 2
-      });
-      
-      const link = document.createElement('a');
-      link.download = 'iitism-valentine-poster.png';
-      link.href = canvas.toDataURL();
-      link.click();
-    }
-  };
-
-  const shareToWhatsApp = async () => {
-    const text = `🎬 My IIT(ISM) Love Lab Film: "${poster.title}" - ${poster.tagline}`;
-    const url = window.location.origin;
-    const fullText = text + ' ' + url;
-    
-    // Try native share first (works best on mobile)
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'IIT(ISM) Love Lab',
-          text: fullText
-        });
-        return;
-      } catch (err) {
-        // User cancelled or share failed, fall through to copy
-      }
-    }
-    
-    // Fallback: copy to clipboard
-    try {
-      await navigator.clipboard.writeText(fullText);
-      alert('Message copied! Paste it in WhatsApp to share.');
-    } catch (err) {
-      // Final fallback: prompt with text
-      prompt('Copy this message and share on WhatsApp:', fullText);
-    }
-  };
-
-  const shareToInstagram = async () => {
-    // Download the image first, then prompt user to share
-    if (posterRef.current) {
-      const canvas = await html2canvas(posterRef.current, {
-        backgroundColor: null,
-        scale: 2
-      });
-      
-      // Convert to blob for better handling
-      canvas.toBlob((blob) => {
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.download = 'iitism-valentine-poster.png';
-        link.href = url;
-        link.click();
-        
-        // Show instruction after download
-        setTimeout(() => {
-          alert('Your poster has been downloaded! Open Instagram and share it to your story.');
-        }, 500);
-      }, 'image/png');
-    }
   };
 
   const continueToQuestionnaire = () => {
