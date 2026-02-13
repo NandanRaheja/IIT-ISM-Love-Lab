@@ -16,11 +16,11 @@ const CampusIdentity = () => {
   });
 
   const years = [
-    { emoji: '🎬', title: 'Fresh Release', subtitle: 'Everything feels cinematic.', year: '1st Year' },
-    { emoji: '🎭', title: 'Interval Complications', subtitle: 'The plot is getting interesting.', year: '2nd Year' },
-    { emoji: '🔥', title: 'Emotional Plot Twist', subtitle: "You didn't see this coming.", year: '3rd Year' },
-    { emoji: '🌅', title: 'Pre-Climax Realisation', subtitle: 'Some choices start to matter.', year: '4th Year' },
-    { emoji: '🏁', title: 'Grand Finale Season', subtitle: 'Endings and new beginnings.', year: '5th Year / Dual Degree' }
+    { number: '1', title: 'Fresh Release', year: '1st Year' },
+    { number: '2', title: 'Interval Complications', year: '2nd Year' },
+    { number: '3', title: 'Emotional Plot Twist', year: '3rd Year' },
+    { number: '4', title: 'Pre-Climax Realisation', year: '4th Year' },
+    { number: '5', title: 'Grand Finale Season', year: '5th Year / Dual Degree' }
   ];
   const hostels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
   const departments = [
@@ -140,7 +140,7 @@ const CampusIdentity = () => {
                     value={yr.year}
                     className="text-[#1C1917] py-3"
                   >
-                    {yr.emoji} {yr.title} - {yr.subtitle}
+                    {yr.number} - {yr.title}
                   </option>
                 ))}
               </select>

@@ -24,11 +24,11 @@ const Confessions = () => {
   });
 
   const years = [
-    { emoji: '🎬', title: 'Fresh Release', year: '1st Year' },
-    { emoji: '🎭', title: 'Interval Complications', year: '2nd Year' },
-    { emoji: '🔥', title: 'Emotional Plot Twist', year: '3rd Year' },
-    { emoji: '🌅', title: 'Pre-Climax Realisation', year: '4th Year' },
-    { emoji: '🏁', title: 'Grand Finale Season', year: '5th Year / Dual Degree' }
+    { number: '1', title: 'Fresh Release', year: '1st Year' },
+    { number: '2', title: 'Interval Complications', year: '2nd Year' },
+    { number: '3', title: 'Emotional Plot Twist', year: '3rd Year' },
+    { number: '4', title: 'Pre-Climax Realisation', year: '4th Year' },
+    { number: '5', title: 'Grand Finale Season', year: '5th Year / Dual Degree' }
   ];
 
   useEffect(() => {
@@ -193,7 +193,7 @@ const Confessions = () => {
                   <option value="" className="text-[#A8A29E]">Select movie part</option>
                   {years.map(yr => (
                     <option key={yr.year} value={yr.year} className="text-[#1C1917]">
-                      {yr.emoji} {yr.title}
+                      {yr.number} - {yr.title}
                     </option>
                   ))}
                 </select>
