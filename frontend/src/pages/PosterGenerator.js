@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import html2canvas from 'html2canvas';
 import Layout from '../components/Layout';
-import { Download, Share2 } from 'lucide-react';
+import { Download, Share2, MessageCircle, Instagram } from 'lucide-react';
 
 const PosterGenerator = () => {
   const navigate = useNavigate();
@@ -193,15 +193,33 @@ const PosterGenerator = () => {
     }
   };
 
-  const sharePoster = () => {
-    if (navigator.share && poster) {
-      navigator.share({
-        title: poster.title,
-        text: `${poster.title} - ${poster.tagline}`,
-        url: window.location.href
+  const shareToWhatsApp = async () => {
+    const text = `🎬 My IIT(ISM) Love Lab Film: "${poster.title}" - ${poster.tagline}`;
+    const url = window.location.origin;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
+  };
+
+  const shareToInstagram = async () => {
+    // Download the image first, then prompt user to share
+    if (posterRef.current) {
+      const canvas = await html2canvas(posterRef.current, {
+        backgroundColor: null,
+        scale: 2
       });
-    } else {
-      downloadPoster();
+      
+      // Convert to blob for better handling
+      canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = 'iitism-valentine-poster.png';
+        link.href = url;
+        link.click();
+        
+        // Show instruction after download
+        setTimeout(() => {
+          alert('Your poster has been downloaded! Open Instagram and share it to your story.');
+        }, 500);
+      }, 'image/png');
     }
   };
 
@@ -377,21 +395,30 @@ const PosterGenerator = () => {
 
           <div className="flex gap-3">
             <button
-              data-testid="share-poster-button"
-              onClick={sharePoster}
-              className="flex-1 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 rounded-full px-6 py-3 font-medium transition-all flex items-center justify-center gap-2 border border-white/20"
+              data-testid="share-whatsapp-button"
+              onClick={shareToWhatsApp}
+              className="flex-1 bg-[#25D366] text-white hover:bg-[#1da851] rounded-full px-4 py-3 font-medium transition-all flex items-center justify-center gap-2"
             >
-              <Share2 className="w-4 h-4" />
-              Share
+              <MessageCircle className="w-4 h-4" />
+              WhatsApp
             </button>
             <button
-              data-testid="continue-button"
-              onClick={continueToQuestionnaire}
-              className="flex-1 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 rounded-full px-6 py-3 font-medium transition-all border border-white/20"
+              data-testid="share-instagram-button"
+              onClick={shareToInstagram}
+              className="flex-1 bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#F77737] text-white hover:opacity-90 rounded-full px-4 py-3 font-medium transition-all flex items-center justify-center gap-2"
             >
-              Continue Experience
+              <Instagram className="w-4 h-4" />
+              Instagram
             </button>
           </div>
+          
+          <button
+            data-testid="continue-button"
+            onClick={continueToQuestionnaire}
+            className="w-full bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 rounded-full px-6 py-3 font-medium transition-all border border-white/20 mt-2"
+          >
+            Continue Experience →
+          </button>
         </motion.div>
       </div>
     </Layout>
