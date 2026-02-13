@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import Layout from '../components/Layout';
 import NotebookCard from '../components/NotebookCard';
-import { Send } from 'lucide-react';
+import { Send, Cloud } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -12,8 +12,10 @@ const API = `${BACKEND_URL}/api`;
 const Confessions = () => {
   const navigate = useNavigate();
   const [confessions, setConfessions] = useState([]);
+  const [wordCloud, setWordCloud] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [showWordCloud, setShowWordCloud] = useState(false);
   const [newConfession, setNewConfession] = useState('');
   const [identity, setIdentity] = useState({
     batch: '',
@@ -23,6 +25,7 @@ const Confessions = () => {
 
   useEffect(() => {
     fetchConfessions();
+    fetchWordCloud();
   }, []);
 
   const fetchConfessions = async () => {
@@ -33,6 +36,15 @@ const Confessions = () => {
     } catch (error) {
       console.error('Error fetching confessions:', error);
       setLoading(false);
+    }
+  };
+
+  const fetchWordCloud = async () => {
+    try {
+      const response = await axios.get(`${API}/wordcloud`);
+      setWordCloud(response.data.words || []);
+    } catch (error) {
+      console.error('Error fetching word cloud:', error);
     }
   };
 
@@ -85,6 +97,43 @@ const Confessions = () => {
           </button>
 
           <AnimatePresence>
+            {showWordCloud && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mb-6 overflow-hidden"
+              >
+                <div className="bg-gradient-to-br from-[#FFF1F2] to-[#FFE4E6] p-6 rounded-xl">
+                  <h3 className="handwritten text-2xl font-bold text-[#E11D48] mb-4 text-center">
+                    Most Used Words in Memories
+                  </h3>
+                  {wordCloud.length > 0 ? (
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {wordCloud.slice(0, 20).map((word, index) => {
+                        const size = Math.max(12, Math.min(32, 12 + word.count * 2));
+                        return (
+                          <motion.span
+                            key={word.text}
+                            data-testid={`word-${index}`}
+                            initial={{ opacity: 0, scale: 0.5 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: index * 0.05 }}
+                            className="font-medium text-[#E11D48] hover:text-[#BE123C] cursor-default transition-colors"
+                            style={{ fontSize: `${size}px` }}
+                          >
+                            {word.text}
+                          </motion.span>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="text-center text-[#A8A29E]">Not enough data yet</p>
+                  )}
+                </div>
+              </motion.div>
+            )}
+            
             {showForm && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
