@@ -132,6 +132,31 @@ class LeaderboardStats(BaseModel):
     department_stats: List[dict]
     total_participants: int
 
+# Partner Link Models
+class PartnerSession(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    
+    link_id: str = Field(default_factory=lambda: str(uuid.uuid4())[:8])
+    partner_a_session: str
+    partner_a_answers: dict
+    partner_a_campus: dict
+    partner_b_session: Optional[str] = None
+    partner_b_answers: Optional[dict] = None
+    partner_b_campus: Optional[dict] = None
+    completed: bool = False
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CreatePartnerLinkRequest(BaseModel):
+    session_id: str
+    campus_identity: dict
+    answers: dict
+
+class JoinPartnerLinkRequest(BaseModel):
+    link_id: str
+    session_id: str
+    campus_identity: dict
+    answers: dict
+
 # API Routes
 @api_router.get("/")
 async def root():
