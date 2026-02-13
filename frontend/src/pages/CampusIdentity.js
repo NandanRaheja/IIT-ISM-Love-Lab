@@ -15,7 +15,7 @@ const CampusIdentity = () => {
     department: ''
   });
 
-  const batches = ['1st', '2nd', '3rd', '4th', 'Dual', 'MTech'];
+  const batches = ['B.Tech./Int.M.Tech.', 'M.Tech', 'M.Sc Tech', 'MBA'];
   const hostels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
   const departments = [
     'CSE', 'ECE', 'EE', 'Mechanical', 'Civil', 'Mining', 'Chemical',
@@ -56,17 +56,19 @@ const CampusIdentity = () => {
 
           <div className="space-y-6 flex-1">
             <div>
-              <label className="block text-sm font-medium text-[#1C1917] mb-2">Batch</label>
-              <div className="grid grid-cols-3 gap-2">
+              <label className="block text-sm font-medium text-[#1C1917] mb-2">
+                Batch <span className="text-[#E11D48]">*</span>
+              </label>
+              <div className="grid grid-cols-2 gap-3">
                 {batches.map(batch => (
                   <button
                     key={batch}
-                    data-testid={`batch-${batch.toLowerCase()}`}
+                    data-testid={`batch-${batch.toLowerCase().replace(/\//g, '-').replace(/\./g, '')}`}
                     onClick={() => setIdentity({...identity, batch})}
-                    className={`py-3 px-4 rounded-lg border-2 transition-all ${
+                    className={`py-4 px-4 rounded-lg border-2 transition-all text-sm ${
                       identity.batch === batch
                         ? 'border-[#E11D48] bg-[#FFF1F2] text-[#E11D48] font-medium'
-                        : 'border-[#E5E7EB] hover:border-[#E11D48] text-[#57534E]'
+                        : 'border-[#E5E7EB] bg-white hover:border-[#E11D48] text-[#57534E] font-medium'
                     }`}
                   >
                     {batch}
@@ -76,31 +78,35 @@ const CampusIdentity = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#1C1917] mb-2">Hostel</label>
+              <label className="block text-sm font-medium text-[#1C1917] mb-2">
+                Hostel <span className="text-[#E11D48]">*</span>
+              </label>
               <select
                 data-testid="hostel-select"
                 value={identity.hostel}
                 onChange={(e) => setIdentity({...identity, hostel: e.target.value})}
-                className="w-full bg-white border-2 border-[#E5E7EB] rounded-lg px-4 py-3 text-[#1C1917] focus:ring-2 focus:ring-[#E11D48] focus:border-transparent outline-none"
+                className="w-full bg-white border-2 border-[#E5E7EB] rounded-lg px-4 py-3 text-[#57534E] font-medium focus:ring-2 focus:ring-[#E11D48] focus:border-transparent outline-none"
               >
-                <option value="">Select your hostel</option>
+                <option value="" className="text-[#A8A29E]">Select your hostel</option>
                 {hostels.map(h => (
-                  <option key={h} value={h}>Hostel {h}</option>
+                  <option key={h} value={h} className="text-[#57534E]">Hostel {h}</option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#1C1917] mb-2">Department</label>
+              <label className="block text-sm font-medium text-[#1C1917] mb-2">
+                Department <span className="text-[#E11D48]">*</span>
+              </label>
               <select
                 data-testid="department-select"
                 value={identity.department}
                 onChange={(e) => setIdentity({...identity, department: e.target.value})}
-                className="w-full bg-white border-2 border-[#E5E7EB] rounded-lg px-4 py-3 text-[#1C1917] focus:ring-2 focus:ring-[#E11D48] focus:border-transparent outline-none"
+                className="w-full bg-white border-2 border-[#E5E7EB] rounded-lg px-4 py-3 text-[#57534E] font-medium focus:ring-2 focus:ring-[#E11D48] focus:border-transparent outline-none"
               >
-                <option value="">Select your department</option>
+                <option value="" className="text-[#A8A29E]">Select your department</option>
                 {departments.map(d => (
-                  <option key={d} value={d}>{d}</option>
+                  <option key={d} value={d} className="text-[#57534E]">{d}</option>
                 ))}
               </select>
             </div>
