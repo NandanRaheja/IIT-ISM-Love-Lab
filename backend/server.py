@@ -36,7 +36,7 @@ def filter_profanity(text: str) -> bool:
 
 # Models
 class CampusIdentity(BaseModel):
-    batch: Literal['1st', '2nd', '3rd', '4th', 'Dual', 'MTech']
+    year: str
     hostel: str
     department: str
 
@@ -48,7 +48,7 @@ class CoupleResponse(BaseModel):
     mode: Literal['couple'] = 'couple'
     
     # Phase 1 - Nostalgia
-    survived: str
+    survived: List[str]
     story_began: str
     texts_first: str
     real_memory: str
