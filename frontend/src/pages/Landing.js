@@ -14,24 +14,38 @@ const Landing = () => {
   });
 
   useEffect(() => {
-    // Countdown to Feb 15, 2026 23:59:59
-    const targetDate = new Date('2026-02-15T23:59:59').getTime();
+    // Event active only on Feb 14, 2026 (00:00:00 to 23:59:59)
+    const eventStart = new Date('2026-02-14T00:00:00').getTime();
+    const eventEnd = new Date('2026-02-14T23:59:59').getTime();
 
     const interval = setInterval(() => {
       const now = new Date().getTime();
-      const distance = targetDate - now;
-
-      if (distance < 0) {
-        clearInterval(interval);
-        return;
+      
+      // If event hasn't started yet, countdown to start
+      if (now < eventStart) {
+        const distance = eventStart - now;
+        setTimeLeft({
+          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((distance % (1000 * 60)) / 1000)
+        });
       }
-
-      setTimeLeft({
-        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-        seconds: Math.floor((distance % (1000 * 60)) / 1000)
-      });
+      // If event is active, countdown to end
+      else if (now >= eventStart && now <= eventEnd) {
+        const distance = eventEnd - now;
+        setTimeLeft({
+          days: 0,
+          hours: Math.floor(distance / (1000 * 60 * 60)),
+          minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((distance % (1000 * 60)) / 1000)
+        });
+      }
+      // Event has ended
+      else {
+        clearInterval(interval);
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      }
     }, 1000);
 
     return () => clearInterval(interval);
@@ -68,7 +82,11 @@ const Landing = () => {
             className="mb-8 space-y-3"
           >
             <div className="bg-white px-4 py-2 rounded-lg shadow-sm inline-block">
-              <p className="text-sm text-[#1C1917] font-medium">Event ends in:</p>
+              <p className="text-sm text-[#1C1917] font-medium">
+                {new Date().getTime() < new Date('2026-02-14T00:00:00').getTime() 
+                  ? 'Event starts in:' 
+                  : 'Time remaining:'}
+              </p>
             </div>
             <div className="flex gap-4 justify-center">
               <div className="text-center">
@@ -126,11 +144,18 @@ const Landing = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1 }}
-            className="mt-8 bg-white px-4 py-2 rounded-lg shadow-sm inline-block"
+            className="mt-8 space-y-2"
           >
-            <p className="text-xs text-[#57534E] italic font-medium">
-              Completely anonymous. No login required.
-            </p>
+            <div className="bg-white px-4 py-2 rounded-lg shadow-sm inline-block">
+              <p className="text-xs text-[#57534E] italic font-medium">
+                Completely anonymous. No login required.
+              </p>
+            </div>
+            <div className="bg-[#FFF1F2] px-4 py-2 rounded-lg shadow-sm inline-block">
+              <p className="text-xs text-[#E11D48] font-bold">
+                🎯 Active only on Feb 14, 2026
+              </p>
+            </div>
           </motion.div>
         </div>
       </NotebookCard>
