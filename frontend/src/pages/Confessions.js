@@ -79,12 +79,14 @@ const Confessions = () => {
       <NotebookCard className="overflow-y-auto">
         <div className="flex-1">
           <div className="text-center mb-6">
-            <h1 className="handwritten text-4xl font-bold text-[#E11D48] mb-2">
+            <h1 className="handwritten text-4xl font-bold text-[#E11D48] mb-3">
               Confession Wall
             </h1>
-            <p className="text-[#1C1917] text-sm font-medium">
-              Anonymous. Moderated. 24-hour visibility.
-            </p>
+            <div className="bg-white px-6 py-2 rounded-lg shadow-sm inline-block">
+              <p className="text-[#1C1917] text-sm font-medium">
+                Anonymous. Moderated. 24-hour visibility.
+              </p>
+            </div>
           </div>
 
           <div className="flex gap-2 mb-6">

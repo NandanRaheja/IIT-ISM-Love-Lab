@@ -50,22 +50,26 @@ const Landing = () => {
             IIT(ISM) Love Lab
           </motion.h1>
           
-          <motion.p
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-[#1C1917] text-base md:text-lg mb-8"
+            className="bg-white px-6 py-3 rounded-lg shadow-sm mb-8"
           >
-            Anonymous Valentine Social Experiment 2026
-          </motion.p>
+            <p className="text-[#1C1917] text-base md:text-lg">
+              Anonymous Valentine Social Experiment 2026
+            </p>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="mb-8 space-y-2"
+            className="mb-8 space-y-3"
           >
-            <p className="text-sm text-[#1C1917] font-medium">Event ends in:</p>
+            <div className="bg-white px-4 py-2 rounded-lg shadow-sm inline-block">
+              <p className="text-sm text-[#1C1917] font-medium">Event ends in:</p>
+            </div>
             <div className="flex gap-4 justify-center">
               <div className="text-center">
                 <div className="text-3xl font-bold text-[#E11D48]">{timeLeft.days}</div>
@@ -118,14 +122,16 @@ const Landing = () => {
             </div>
           </motion.div>
 
-          <motion.p
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1 }}
-            className="mt-8 text-xs text-[#57534E] italic font-medium"
+            className="mt-8 bg-white px-4 py-2 rounded-lg shadow-sm inline-block"
           >
-            Completely anonymous. No login required.
-          </motion.p>
+            <p className="text-xs text-[#57534E] italic font-medium">
+              Completely anonymous. No login required.
+            </p>
+          </motion.div>
         </div>
       </NotebookCard>
     </Layout>

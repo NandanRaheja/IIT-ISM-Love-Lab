@@ -92,9 +92,11 @@ const Results = () => {
                 />
               ))}
             </div>
-            <p className="text-[#1C1917] text-center font-medium">
-              Analyzing your emotional patterns...
-            </p>
+            <div className="bg-white px-6 py-3 rounded-lg shadow-sm">
+              <p className="text-[#1C1917] text-center font-medium">
+                Analyzing your emotional patterns...
+              </p>
+            </div>
           </div>
         </NotebookCard>
       </Layout>
@@ -106,7 +108,9 @@ const Results = () => {
       <Layout>
         <NotebookCard>
           <div className="flex-1 flex flex-col items-center justify-center">
-            <p className="text-[#1C1917] text-center mb-4 font-medium">Failed to load insights</p>
+            <div className="bg-white px-6 py-3 rounded-lg shadow-sm mb-4">
+              <p className="text-[#1C1917] text-center font-medium">Failed to load insights</p>
+            </div>
             <button
               onClick={() => navigate('/')}
               className="bg-[#E11D48] text-white rounded-full px-6 py-3"
@@ -142,11 +146,15 @@ const Results = () => {
                   <div className="text-6xl font-bold text-[#E11D48] mb-2">
                     {insights.perception_score}%
                   </div>
-                  <div className="text-sm text-[#1C1917] font-medium">Perception Alignment</div>
-                  <div className="mt-2 px-4 py-2 bg-[#FFF1F2] rounded-full inline-block">
-                    <span className="text-sm font-medium text-[#E11D48]">
-                      {insights.relationship_type}
-                    </span>
+                  <div className="bg-white px-4 py-2 rounded-lg shadow-sm inline-block mb-2">
+                    <div className="text-sm text-[#1C1917] font-medium">Perception Alignment</div>
+                  </div>
+                  <div className="block">
+                    <div className="mt-2 px-4 py-2 bg-[#FFF1F2] rounded-full inline-block">
+                      <span className="text-sm font-medium text-[#E11D48]">
+                        {insights.relationship_type}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -157,39 +165,45 @@ const Results = () => {
                   <h3 className="handwritten text-2xl font-bold text-[#1C1917] mb-3">
                     What You Got Right ✔️
                   </h3>
-                  <ul className="space-y-2">
-                    {insights.got_right.map((item, i) => (
-                      <li key={i} className="text-[#57534E] pl-4 border-l-2 border-[#10B981]">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <ul className="space-y-2">
+                      {insights.got_right.map((item, i) => (
+                        <li key={i} className="text-[#1C1917] pl-4 border-l-2 border-[#10B981]">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
 
                 <div>
                   <h3 className="handwritten text-2xl font-bold text-[#1C1917] mb-3">
                     What You Misread 💡
                   </h3>
-                  <ul className="space-y-2">
-                    {insights.misread.map((item, i) => (
-                      <li key={i} className="text-[#57534E] pl-4 border-l-2 border-[#F59E0B]">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <ul className="space-y-2">
+                      {insights.misread.map((item, i) => (
+                        <li key={i} className="text-[#1C1917] pl-4 border-l-2 border-[#F59E0B]">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
 
                 <div>
                   <h3 className="handwritten text-2xl font-bold text-[#1C1917] mb-3">
                     Key Insights
                   </h3>
-                  <ul className="space-y-2">
-                    {insights.insights.map((item, i) => (
-                      <li key={i} className="text-[#57534E] pl-4 border-l-2 border-[#E11D48]">
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <ul className="space-y-2">
+                      {insights.insights.map((item, i) => (
+                        <li key={i} className="text-[#1C1917] pl-4 border-l-2 border-[#E11D48]">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
 
                 <div className="bg-[#FFF1F2] p-4 rounded-xl">
@@ -239,7 +253,9 @@ const Results = () => {
                   <div className="text-5xl font-bold text-[#E11D48] mb-2">
                     {insights.self_awareness_score}%
                   </div>
-                  <div className="text-sm text-[#1C1917] font-medium">Self-Awareness Score</div>
+                  <div className="bg-white px-4 py-2 rounded-lg shadow-sm inline-block">
+                    <div className="text-sm text-[#1C1917] font-medium">Self-Awareness Score</div>
+                  </div>
                 </div>
               </div>
 
@@ -248,31 +264,37 @@ const Results = () => {
                   <h3 className="handwritten text-2xl font-bold text-[#1C1917] mb-3">
                     Relationship Readiness
                   </h3>
-                  <p className="text-[#57534E] pl-4 border-l-2 border-[#E11D48]">
-                    {insights.relationship_readiness}
-                  </p>
+                  <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <p className="text-[#1C1917] pl-4 border-l-2 border-[#E11D48]">
+                      {insights.relationship_readiness}
+                    </p>
+                  </div>
                 </div>
 
                 <div>
                   <h3 className="handwritten text-2xl font-bold text-[#1C1917] mb-3">
                     Your Emotional Pattern
                   </h3>
-                  <p className="text-[#57534E] pl-4 border-l-2 border-[#10B981]">
-                    {insights.emotional_pattern}
-                  </p>
+                  <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <p className="text-[#1C1917] pl-4 border-l-2 border-[#10B981]">
+                      {insights.emotional_pattern}
+                    </p>
+                  </div>
                 </div>
 
                 <div>
                   <h3 className="handwritten text-2xl font-bold text-[#1C1917] mb-3">
                     Ideal Partner Traits
                   </h3>
-                  <ul className="space-y-2">
-                    {insights.ideal_partner_traits.map((trait, i) => (
-                      <li key={i} className="text-[#57534E] pl-4 border-l-2 border-[#E11D48]">
-                        {trait}
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="bg-white p-4 rounded-lg shadow-sm">
+                    <ul className="space-y-2">
+                      {insights.ideal_partner_traits.map((trait, i) => (
+                        <li key={i} className="text-[#1C1917] pl-4 border-l-2 border-[#E11D48]">
+                          {trait}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
 
                 <div className="bg-[#FFF1F2] p-4 rounded-xl">

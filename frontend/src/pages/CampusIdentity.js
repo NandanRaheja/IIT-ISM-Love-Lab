@@ -44,13 +44,15 @@ const CampusIdentity = () => {
     <Layout>
       <NotebookCard>
         <div className="flex-1 flex flex-col">
-          <h2 className="handwritten text-4xl font-bold text-[#1C1917] mb-2">
+          <h2 className="handwritten text-4xl font-bold text-[#1C1917] mb-3">
             Campus Identity
           </h2>
           
-          <p className="text-[#1C1917] mb-8 text-sm font-medium">
-            Anonymous. Only for stats.
-          </p>
+          <div className="bg-white px-4 py-2 rounded-lg shadow-sm mb-8 inline-block">
+            <p className="text-[#1C1917] text-sm font-medium">
+              Anonymous. Only for stats.
+            </p>
+          </div>
 
           <div className="space-y-6 flex-1">
             <div>

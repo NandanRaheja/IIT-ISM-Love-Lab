@@ -47,12 +47,14 @@ const Leaderboards = () => {
       <NotebookCard className="overflow-y-auto">
         <div className="flex-1">
           <div className="text-center mb-6">
-            <h1 className="handwritten text-4xl font-bold text-[#E11D48] mb-2">
+            <h1 className="handwritten text-4xl font-bold text-[#E11D48] mb-3">
               Campus Leaderboards
             </h1>
-            <p className="text-[#1C1917] text-sm font-medium">
-              {stats?.total_participants || 0} participants and counting
-            </p>
+            <div className="bg-white px-6 py-2 rounded-lg shadow-sm inline-block">
+              <p className="text-[#1C1917] text-sm font-medium">
+                {stats?.total_participants || 0} participants and counting
+              </p>
+            </div>
           </div>
 
           {/* Tabs */}

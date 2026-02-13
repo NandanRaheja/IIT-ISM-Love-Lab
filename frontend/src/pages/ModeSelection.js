@@ -20,9 +20,11 @@ const ModeSelection = () => {
             Choose Your Path
           </h2>
           
-          <p className="text-[#1C1917] text-center mb-12">
-            Select the experience that fits you
-          </p>
+          <div className="bg-white px-6 py-3 rounded-lg shadow-sm mb-12 mx-auto inline-block">
+            <p className="text-[#1C1917] text-center">
+              Select the experience that fits you
+            </p>
+          </div>
 
           <div className="space-y-4 w-full">
             <motion.button
