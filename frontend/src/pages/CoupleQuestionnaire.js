@@ -45,9 +45,26 @@ const CoupleQuestionnaire = () => {
     },
     {
       id: 'real_memory',
-      title: 'Share one real memory',
-      type: 'text',
-      placeholder: 'A moment that still makes you smile...'
+      title: 'What moment do you hold closest?',
+      type: 'choice_detailed',
+      options: [
+        {
+          heading: 'Late-Night Conversations',
+          subtitle: 'When sleep could wait.'
+        },
+        {
+          heading: 'A Few Unspoken Days',
+          subtitle: 'When silence said enough.'
+        },
+        {
+          heading: 'One Honest Conversation',
+          subtitle: 'That changed everything softly.'
+        },
+        {
+          heading: 'Slow Realisations',
+          subtitle: 'That this mattered more than you thought.'
+        }
+      ]
     },
     {
       id: 'partner_stress',
