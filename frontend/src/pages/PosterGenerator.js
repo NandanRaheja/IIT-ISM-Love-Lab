@@ -205,6 +205,15 @@ const PosterGenerator = () => {
     }
   };
 
+  const continueToQuestionnaire = () => {
+    const mode = sessionStorage.getItem('mode');
+    if (mode === 'couple') {
+      navigate('/couple');
+    } else {
+      navigate('/single');
+    }
+  };
+
   if (loading || !poster) {
     return (
       <Layout>
@@ -377,7 +386,7 @@ const PosterGenerator = () => {
             </button>
             <button
               data-testid="continue-button"
-              onClick={() => navigate('/couple')}
+              onClick={continueToQuestionnaire}
               className="flex-1 bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 rounded-full px-6 py-3 font-medium transition-all border border-white/20"
             >
               Continue Experience
