@@ -221,7 +221,7 @@ const Leaderboards = () => {
                         }`}>
                           {index === 0 ? <Trophy className="w-5 h-5" /> : index + 1}
                         </div>
-                        <div className="font-medium text-[#1C1917]">{item._id}</div>
+                        <div className="font-medium text-[#1C1917]">{getDepartmentShortName(item._id)}</div>
                       </div>
                       <div className="text-right">
                         <div className="text-lg font-bold text-[#E11D48]">{item.count}</div>
