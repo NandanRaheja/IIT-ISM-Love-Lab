@@ -18,9 +18,71 @@ const CampusIdentity = () => {
   const batches = ['B.Tech./Int.M.Tech.', 'M.Tech', 'M.Sc Tech', 'MBA'];
   const hostels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
   const departments = [
-    'CSE', 'ECE', 'EE', 'Mechanical', 'Civil', 'Mining', 'Chemical',
-    'Petroleum', 'Mathematics', 'Physics', 'Chemistry', 'Environmental',
-    'Applied Geology', 'Applied Geophysics'
+    {
+      genre: 'Tech Romance Thriller',
+      subtitle: 'Debugging code by day. Overthinking texts by night.',
+      branch: 'Computer Science & Engineering'
+    },
+    {
+      genre: 'Analytical Romantic Drama',
+      subtitle: 'Finds patterns everywhere. Especially in mixed signals.',
+      branch: 'Mathematics & Computing'
+    },
+    {
+      genre: 'Intense Energy Saga',
+      subtitle: 'High voltage outside. Low battery emotionally.',
+      branch: 'Electrical Engineering'
+    },
+    {
+      genre: 'Signal & Silence Story',
+      subtitle: 'Knows transmission. Struggles with confession.',
+      branch: 'Electronics & Communication Engineering'
+    },
+    {
+      genre: 'Slow-Burn Love Story',
+      subtitle: 'Builds patiently. Falls silently.',
+      branch: 'Civil Engineering'
+    },
+    {
+      genre: 'Action Hero With Soft Corner',
+      subtitle: 'Loud laugh. Quiet feelings.',
+      branch: 'Mechanical Engineering'
+    },
+    {
+      genre: 'Deep & Dramatic Epic',
+      subtitle: 'Understands depth. Rarely shows it.',
+      branch: 'Mining Engineering'
+    },
+    {
+      genre: 'Heavy Metal Romance',
+      subtitle: 'Machines are simple. Hearts are not.',
+      branch: 'Mining Machinery Engineering'
+    },
+    {
+      genre: 'Experimental Love Story',
+      subtitle: 'Unpredictable chemistry.',
+      branch: 'Chemical Engineering'
+    },
+    {
+      genre: 'Earth & Emotions Chronicle',
+      subtitle: 'Studies layers. Hides their own.',
+      branch: 'Applied Geology'
+    },
+    {
+      genre: 'Seismic Heartbeat Saga',
+      subtitle: 'Detects vibrations others miss.',
+      branch: 'Applied Geophysics'
+    },
+    {
+      genre: 'Environmental Parallel Cinema',
+      subtitle: 'Cares deeply. Shows it quietly.',
+      branch: 'Environmental Engineering'
+    },
+    {
+      genre: 'Physics-Based Love Theory',
+      subtitle: 'Believes in forces. Especially unseen ones.',
+      branch: 'Engineering Physics'
+    }
   ];
 
   const handleNext = () => {
@@ -96,19 +158,35 @@ const CampusIdentity = () => {
 
             <div>
               <label className="block text-sm font-medium text-[#1C1917] mb-2">
-                Department <span className="text-[#E11D48]">*</span>
+                🎬 Choose Your Film Genre <span className="text-[#E11D48]">*</span>
               </label>
               <select
                 data-testid="department-select"
                 value={identity.department}
                 onChange={(e) => setIdentity({...identity, department: e.target.value})}
-                className="w-full bg-white border-2 border-[#E5E7EB] rounded-lg px-4 py-3 text-[#57534E] font-medium focus:ring-2 focus:ring-[#E11D48] focus:border-transparent outline-none"
+                className="w-full bg-white/80 backdrop-blur-sm border-2 border-[#E5E7EB] rounded-2xl px-4 py-4 text-[#57534E] font-medium focus:ring-2 focus:ring-[#E11D48] focus:border-[#E11D48] focus:shadow-lg focus:shadow-[#E11D48]/20 outline-none transition-all duration-300"
+                style={{
+                  backgroundImage: 'linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,255,255,0.7))'
+                }}
               >
-                <option value="" className="text-[#A8A29E]">Select your department</option>
-                {departments.map(d => (
-                  <option key={d} value={d} className="text-[#57534E]">{d}</option>
+                <option value="" className="text-[#A8A29E]">Select your genre...</option>
+                {departments.map(dept => (
+                  <option 
+                    key={dept.branch} 
+                    value={dept.branch}
+                    className="text-[#1C1917] py-3"
+                  >
+                    {dept.genre} - {dept.subtitle}
+                  </option>
                 ))}
               </select>
+              {identity.department && (
+                <div className="mt-2 bg-[#FFF1F2] px-4 py-2 rounded-lg">
+                  <p className="text-xs text-[#A8A29E] font-medium">
+                    {departments.find(d => d.branch === identity.department)?.branch}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
