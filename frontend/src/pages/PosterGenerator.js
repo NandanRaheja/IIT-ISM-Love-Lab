@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import html2canvas from 'html2canvas';
 import Layout from '../components/Layout';
-import { Download, Share2, MessageCircle, Instagram } from 'lucide-react';
+import { Download } from 'lucide-react';
 
 const PosterGenerator = () => {
   const navigate = useNavigate();
@@ -415,25 +415,6 @@ const PosterGenerator = () => {
             Download Your Film Poster
           </button>
 
-          <div className="flex gap-3">
-            <button
-              data-testid="share-whatsapp-button"
-              onClick={shareToWhatsApp}
-              className="flex-1 bg-[#25D366] text-white hover:bg-[#1da851] rounded-full px-4 py-3 font-medium transition-all flex items-center justify-center gap-2"
-            >
-              <MessageCircle className="w-4 h-4" />
-              WhatsApp
-            </button>
-            <button
-              data-testid="share-instagram-button"
-              onClick={shareToInstagram}
-              className="flex-1 bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#F77737] text-white hover:opacity-90 rounded-full px-4 py-3 font-medium transition-all flex items-center justify-center gap-2"
-            >
-              <Instagram className="w-4 h-4" />
-              Instagram
-            </button>
-          </div>
-          
           <button
             data-testid="continue-button"
             onClick={continueToQuestionnaire}
