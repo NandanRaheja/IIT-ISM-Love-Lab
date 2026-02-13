@@ -43,7 +43,7 @@ const CoupleQuestionnaire = () => {
       id: 'survived',
       title: 'Your relationship survived:',
       type: 'choice',
-      options: ['Mess paneer', '75% attendance', 'Intern season', 'Lab politics', 'Placement anxiety']
+      options: ['Assignment deadline week', 'Mid-sem exam season', 'Intern season', 'Project submission chaos', 'Placement anxiety']
     },
     {
       id: 'real_memory',
