@@ -5,7 +5,7 @@ import axios from 'axios';
 import html2canvas from 'html2canvas';
 import Layout from '../components/Layout';
 import NotebookCard from '../components/NotebookCard';
-import { Download, Share2 } from 'lucide-react';
+import { Download, Share2, MessageCircle } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -55,6 +55,19 @@ const Results = () => {
       link.href = canvas.toDataURL();
       link.click();
     }
+  };
+
+  const shareToWhatsApp = async () => {
+    const text = mode === 'couple' 
+      ? `I got ${insights.perception_score}% perception alignment on IIT(ISM) Love Lab! 💕`
+      : `My self-awareness score: ${insights.self_awareness_score}% on IIT(ISM) Love Lab! 🎯`;
+    const url = 'https://campus-hearts-5.preview.emergentagent.com';
+    window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
+  };
+
+  const shareToInstagram = async () => {
+    alert('Download the card and share it to your Instagram story!');
+    downloadCard();
   };
 
   if (loading) {
@@ -289,6 +302,25 @@ const Results = () => {
               <Download className="w-5 h-5" />
               Download Result Card
             </button>
+            
+            <div className="flex gap-2">
+              <button
+                data-testid="share-whatsapp-button"
+                onClick={shareToWhatsApp}
+                className="flex-1 bg-[#10B981] text-white hover:bg-[#059669] rounded-full px-4 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2"
+              >
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp
+              </button>
+              <button
+                data-testid="share-instagram-button"
+                onClick={shareToInstagram}
+                className="flex-1 bg-gradient-to-r from-[#E11D48] to-[#F59E0B] text-white hover:opacity-90 rounded-full px-4 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2"
+              >
+                <Share2 className="w-4 h-4" />
+                Instagram
+              </button>
+            </div>
             
             <div className="flex gap-2">
               <button
