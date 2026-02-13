@@ -79,10 +79,10 @@ const Confessions = () => {
     { short: 'ECE', genre: 'Signal & Silence Story', branch: 'Electronics & Communication Engineering' },
     { short: 'CE', genre: 'Slow-Burn Love Story', branch: 'Civil Engineering' },
     { short: 'ME', genre: 'Action Hero With Soft Corner', branch: 'Mechanical Engineering' },
-    { short: 'MN', genre: 'Deep & Dramatic Epic', branch: 'Mining Engineering' },
+    { short: 'Mining Eng.', genre: 'Deep & Dramatic Epic', branch: 'Mining Engineering' },
     { short: 'MME', genre: 'Heavy Metal Romance', branch: 'Mining Machinery Engineering' },
     { short: 'CHE', genre: 'Experimental Love Story', branch: 'Chemical Engineering' },
-    { short: 'AG', genre: 'Earth & Emotions Chronicle', branch: 'Applied Geology' },
+    { short: 'AGL', genre: 'Earth & Emotions Chronicle', branch: 'Applied Geology' },
     { short: 'AGP', genre: 'Seismic Heartbeat Saga', branch: 'Applied Geophysics' },
     { short: 'ENV', genre: 'Environmental Parallel Cinema', branch: 'Environmental Engineering' },
     { short: 'EP', genre: 'Physics-Based Love Theory', branch: 'Engineering Physics' }

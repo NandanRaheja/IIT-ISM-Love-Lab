@@ -49,7 +49,7 @@ const CampusIdentity = () => {
       branch: 'Mechanical Engineering'
     },
     {
-      short: 'MN',
+      short: 'Mining Eng.',
       genre: 'Deep & Dramatic Epic',
       branch: 'Mining Engineering'
     },
@@ -64,7 +64,7 @@ const CampusIdentity = () => {
       branch: 'Chemical Engineering'
     },
     {
-      short: 'AG',
+      short: 'AGL',
       genre: 'Earth & Emotions Chronicle',
       branch: 'Applied Geology'
     },
