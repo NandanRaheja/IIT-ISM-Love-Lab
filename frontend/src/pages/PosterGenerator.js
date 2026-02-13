@@ -416,14 +416,16 @@ const PosterGenerator = () => {
           </button>
 
           <div className="flex gap-3">
-            <button
+            <a
               data-testid="share-whatsapp-button"
-              onClick={shareToWhatsApp}
+              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`🎬 My IIT(ISM) Love Lab Film: "${poster?.title}" - ${poster?.tagline} ${window.location.origin}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex-1 bg-[#25D366] text-white hover:bg-[#1da851] rounded-full px-4 py-3 font-medium transition-all flex items-center justify-center gap-2"
             >
               <MessageCircle className="w-4 h-4" />
               WhatsApp
-            </button>
+            </a>
             <button
               data-testid="share-instagram-button"
               onClick={shareToInstagram}
