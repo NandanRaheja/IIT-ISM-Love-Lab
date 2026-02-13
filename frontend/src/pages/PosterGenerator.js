@@ -219,7 +219,6 @@ const PosterGenerator = () => {
       <div className="relative z-10 w-full max-w-2xl mx-auto px-4 py-8">
         {/* Poster */}
         <motion.div
-          ref={posterRef}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
