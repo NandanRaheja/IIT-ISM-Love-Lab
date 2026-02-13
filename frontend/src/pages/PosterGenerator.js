@@ -196,16 +196,29 @@ const PosterGenerator = () => {
   const shareToWhatsApp = async () => {
     const text = `🎬 My IIT(ISM) Love Lab Film: "${poster.title}" - ${poster.tagline}`;
     const url = window.location.origin;
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + url)}`;
+    const fullText = text + ' ' + url;
     
-    // Create a temporary link and click it
-    const link = document.createElement('a');
-    link.href = whatsappUrl;
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Try native share first (works best on mobile)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'IIT(ISM) Love Lab',
+          text: fullText
+        });
+        return;
+      } catch (err) {
+        // User cancelled or share failed, fall through to copy
+      }
+    }
+    
+    // Fallback: copy to clipboard
+    try {
+      await navigator.clipboard.writeText(fullText);
+      alert('Message copied! Paste it in WhatsApp to share.');
+    } catch (err) {
+      // Final fallback: prompt with text
+      prompt('Copy this message and share on WhatsApp:', fullText);
+    }
   };
 
   const shareToInstagram = async () => {
