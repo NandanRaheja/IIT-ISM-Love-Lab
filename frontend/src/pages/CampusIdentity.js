@@ -101,6 +101,14 @@ const CampusIdentity = () => {
     sessionStorage.setItem('sessionId', sessionId);
     sessionStorage.setItem('campusIdentity', JSON.stringify(identity));
     
+    // Check if this is a partner joining via link
+    const partnerMode = sessionStorage.getItem('mode');
+    if (partnerMode === 'partner') {
+      // Skip poster and go directly to questionnaire
+      navigate('/couple');
+      return;
+    }
+    
     // Navigate to poster generator first
     navigate('/poster');
   };
