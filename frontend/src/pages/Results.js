@@ -61,7 +61,7 @@ const Results = () => {
     const text = mode === 'couple' 
       ? `I got ${insights.perception_score}% perception alignment on IIT(ISM) Love Lab! 💕`
       : `My self-awareness score: ${insights.self_awareness_score}% on IIT(ISM) Love Lab! 🎯`;
-    const url = 'https://campus-hearts-5.preview.emergentagent.com';
+    const url = 'https://valentine-identity.preview.emergentagent.com';
     window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
   };
 

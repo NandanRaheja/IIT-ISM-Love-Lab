@@ -8,7 +8,7 @@ from datetime import datetime
 from typing import Dict, Any
 
 # Configuration
-BACKEND_URL = "https://campus-hearts-5.preview.emergentagent.com/api"
+BACKEND_URL = "https://valentine-identity.preview.emergentagent.com/api"
 
 class LovLabAPITester:
     def __init__(self):
