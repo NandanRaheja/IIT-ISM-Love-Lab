@@ -416,16 +416,22 @@ const PosterGenerator = () => {
           </button>
 
           <div className="flex gap-3">
-            <a
+            <button
               data-testid="share-whatsapp-button"
-              href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`🎬 My IIT(ISM) Love Lab Film: "${poster?.title}" - ${poster?.tagline} ${window.location.origin}`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
+              onClick={async () => {
+                const text = `🎬 My IIT(ISM) Love Lab Film: "${poster?.title}" - ${poster?.tagline} ${window.location.origin}`;
+                try {
+                  await navigator.clipboard.writeText(text);
+                  alert('✅ Copied! Now open WhatsApp and paste the message.');
+                } catch (err) {
+                  prompt('Copy this message:', text);
+                }
+              }}
               className="flex-1 bg-[#25D366] text-white hover:bg-[#1da851] rounded-full px-4 py-3 font-medium transition-all flex items-center justify-center gap-2"
             >
               <MessageCircle className="w-4 h-4" />
               WhatsApp
-            </a>
+            </button>
             <button
               data-testid="share-instagram-button"
               onClick={shareToInstagram}

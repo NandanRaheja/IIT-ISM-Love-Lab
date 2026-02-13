@@ -367,16 +367,24 @@ const Results = () => {
             </button>
             
             <div className="flex gap-2">
-              <a
+              <button
                 data-testid="share-whatsapp-button"
-                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(mode === 'couple' ? `I got ${insights?.perception_score}% perception alignment on IIT(ISM) Love Lab! 💕 ${window.location.origin}` : `My self-awareness score: ${insights?.self_awareness_score}% on IIT(ISM) Love Lab! 🎯 ${window.location.origin}`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
+                onClick={async () => {
+                  const text = mode === 'couple' 
+                    ? `I got ${insights?.perception_score}% perception alignment on IIT(ISM) Love Lab! 💕 ${window.location.origin}`
+                    : `My self-awareness score: ${insights?.self_awareness_score}% on IIT(ISM) Love Lab! 🎯 ${window.location.origin}`;
+                  try {
+                    await navigator.clipboard.writeText(text);
+                    alert('✅ Copied! Now open WhatsApp and paste the message.');
+                  } catch (err) {
+                    prompt('Copy this message:', text);
+                  }
+                }}
                 className="flex-1 bg-[#10B981] text-white hover:bg-[#059669] rounded-full px-4 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2"
               >
                 <MessageCircle className="w-4 h-4" />
                 WhatsApp
-              </a>
+              </button>
               <button
                 data-testid="share-instagram-button"
                 onClick={shareToInstagram}
