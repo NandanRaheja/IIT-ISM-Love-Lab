@@ -367,14 +367,16 @@ const Results = () => {
             </button>
             
             <div className="flex gap-2">
-              <button
+              <a
                 data-testid="share-whatsapp-button"
-                onClick={shareToWhatsApp}
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(mode === 'couple' ? `I got ${insights?.perception_score}% perception alignment on IIT(ISM) Love Lab! 💕 ${window.location.origin}` : `My self-awareness score: ${insights?.self_awareness_score}% on IIT(ISM) Love Lab! 🎯 ${window.location.origin}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="flex-1 bg-[#10B981] text-white hover:bg-[#059669] rounded-full px-4 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2"
               >
                 <MessageCircle className="w-4 h-4" />
                 WhatsApp
-              </button>
+              </a>
               <button
                 data-testid="share-instagram-button"
                 onClick={shareToInstagram}
