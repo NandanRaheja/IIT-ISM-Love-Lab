@@ -100,7 +100,7 @@ const PosterGenerator = () => {
     'Some chapters stay.',
     'This one was never accidental.',
     'Every plot twist has a reason.',
-    'Certain feelings don't need permission.'
+    'Certain feelings do not need permission.'
   ];
 
   const releaseLines = [
