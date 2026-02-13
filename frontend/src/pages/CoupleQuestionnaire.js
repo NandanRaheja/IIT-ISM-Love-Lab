@@ -26,12 +26,6 @@ const CoupleQuestionnaire = () => {
 
   const questions = [
     {
-      id: 'survived',
-      title: 'Your relationship survived:',
-      type: 'choice',
-      options: ['Mess paneer', '75% attendance', 'Intern season', 'Lab politics', 'Placement anxiety']
-    },
-    {
       id: 'story_began',
       title: 'Where did your story begin?',
       type: 'choice',
@@ -42,6 +36,12 @@ const CoupleQuestionnaire = () => {
       title: 'Who texts "Reached hostel?" first?',
       type: 'choice',
       options: ['Me', 'Them', 'Both equally', 'Neither - we call']
+    },
+    {
+      id: 'survived',
+      title: 'Your relationship survived:',
+      type: 'choice',
+      options: ['Mess paneer', '75% attendance', 'Intern season', 'Lab politics', 'Placement anxiety']
     },
     {
       id: 'real_memory',
@@ -67,16 +67,16 @@ const CoupleQuestionnaire = () => {
       ]
     },
     {
-      id: 'partner_stress',
-      title: 'What stresses your partner most right now?',
-      type: 'text',
-      placeholder: 'Be honest and thoughtful...'
-    },
-    {
       id: 'partner_appreciated',
       title: 'When does your partner feel most appreciated?',
       type: 'text',
       placeholder: 'Think about the small moments...'
+    },
+    {
+      id: 'partner_stress',
+      title: 'What stresses your partner most right now?',
+      type: 'text',
+      placeholder: 'Be honest and thoughtful...'
     },
     {
       id: 'partner_needs',
