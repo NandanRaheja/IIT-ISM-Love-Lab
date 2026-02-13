@@ -278,7 +278,7 @@ const Results = () => {
                   <h3 className="handwritten text-xl font-bold text-[#1C1917] mb-2">
                     Message from Your Future Partner:
                   </h3>
-                  <p className="text-[#57534E] italic">{insights.future_message}</p>
+                  <p className="text-[#1C1917] italic">{insights.future_message}</p>
                 </div>
               </div>
             </motion.div>
