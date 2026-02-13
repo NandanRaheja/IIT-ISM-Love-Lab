@@ -5,7 +5,7 @@ import axios from 'axios';
 import html2canvas from 'html2canvas';
 import Layout from '../components/Layout';
 import NotebookCard from '../components/NotebookCard';
-import { Download, Share2, MessageCircle } from 'lucide-react';
+import { Download, Share2, MessageCircle, Instagram } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -66,8 +66,27 @@ const Results = () => {
   };
 
   const shareToInstagram = async () => {
-    alert('Download the card and share it to your Instagram story!');
-    downloadCard();
+    // Download the image first, then prompt user to share
+    if (cardRef.current) {
+      const canvas = await html2canvas(cardRef.current, {
+        backgroundColor: '#FDFBF7',
+        scale: 2
+      });
+      
+      // Convert to blob for better handling
+      canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = 'iitism-love-lab-result.png';
+        link.href = url;
+        link.click();
+        
+        // Show instruction after download
+        setTimeout(() => {
+          alert('Your result card has been downloaded! Open Instagram and share it to your story.');
+        }, 500);
+      }, 'image/png');
+    }
   };
 
   if (loading) {
@@ -337,9 +356,9 @@ const Results = () => {
               <button
                 data-testid="share-instagram-button"
                 onClick={shareToInstagram}
-                className="flex-1 bg-gradient-to-r from-[#E11D48] to-[#F59E0B] text-white hover:opacity-90 rounded-full px-4 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2"
+                className="flex-1 bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#F77737] text-white hover:opacity-90 rounded-full px-4 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2"
               >
-                <Share2 className="w-4 h-4" />
+                <Instagram className="w-4 h-4" />
                 Instagram
               </button>
             </div>
