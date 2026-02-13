@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import html2canvas from 'html2canvas';
 import Layout from '../components/Layout';
-import { Download, Share2, MessageCircle, Instagram } from 'lucide-react';
 
 const PosterGenerator = () => {
   const navigate = useNavigate();
@@ -407,45 +405,9 @@ const PosterGenerator = () => {
           className="mt-8 space-y-4"
         >
           <button
-            data-testid="download-poster-button"
-            onClick={downloadPoster}
-            className="w-full bg-[#E11D48] text-white hover:bg-[#BE123C] rounded-full px-8 py-4 font-medium transition-all transform hover:scale-105 active:scale-95 shadow-lg flex items-center justify-center gap-2"
-          >
-            <Download className="w-5 h-5" />
-            Download Your Film Poster
-          </button>
-
-          <div className="flex gap-3">
-            <button
-              data-testid="share-whatsapp-button"
-              onClick={async () => {
-                const text = `🎬 My IIT(ISM) Love Lab Film: "${poster?.title}" - ${poster?.tagline} ${window.location.origin}`;
-                try {
-                  await navigator.clipboard.writeText(text);
-                  alert('✅ Copied! Now open WhatsApp and paste the message.');
-                } catch (err) {
-                  prompt('Copy this message:', text);
-                }
-              }}
-              className="flex-1 bg-[#25D366] text-white hover:bg-[#1da851] rounded-full px-4 py-3 font-medium transition-all flex items-center justify-center gap-2"
-            >
-              <MessageCircle className="w-4 h-4" />
-              WhatsApp
-            </button>
-            <button
-              data-testid="share-instagram-button"
-              onClick={shareToInstagram}
-              className="flex-1 bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#F77737] text-white hover:opacity-90 rounded-full px-4 py-3 font-medium transition-all flex items-center justify-center gap-2"
-            >
-              <Instagram className="w-4 h-4" />
-              Instagram
-            </button>
-          </div>
-          
-          <button
             data-testid="continue-button"
             onClick={continueToQuestionnaire}
-            className="w-full bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 rounded-full px-6 py-3 font-medium transition-all border border-white/20 mt-2"
+            className="w-full bg-[#E11D48] text-white hover:bg-[#BE123C] rounded-full px-8 py-4 font-medium transition-all transform hover:scale-105 active:scale-95 shadow-lg"
           >
             Continue Experience →
           </button>

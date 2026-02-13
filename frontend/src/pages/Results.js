@@ -2,10 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import html2canvas from 'html2canvas';
 import Layout from '../components/Layout';
 import NotebookCard from '../components/NotebookCard';
-import { Download, Share2, MessageCircle, Instagram } from 'lucide-react';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
@@ -357,44 +355,6 @@ const Results = () => {
 
           {/* Actions */}
           <div className="mt-8 space-y-3">
-            <button
-              data-testid="download-button"
-              onClick={downloadCard}
-              className="w-full bg-[#E11D48] text-white hover:bg-[#BE123C] rounded-full px-8 py-4 font-medium transition-all transform hover:scale-105 active:scale-95 shadow-lg flex items-center justify-center gap-2"
-            >
-              <Download className="w-5 h-5" />
-              Download Result Card
-            </button>
-            
-            <div className="flex gap-2">
-              <button
-                data-testid="share-whatsapp-button"
-                onClick={async () => {
-                  const text = mode === 'couple' 
-                    ? `I got ${insights?.perception_score}% perception alignment on IIT(ISM) Love Lab! 💕 ${window.location.origin}`
-                    : `My self-awareness score: ${insights?.self_awareness_score}% on IIT(ISM) Love Lab! 🎯 ${window.location.origin}`;
-                  try {
-                    await navigator.clipboard.writeText(text);
-                    alert('✅ Copied! Now open WhatsApp and paste the message.');
-                  } catch (err) {
-                    prompt('Copy this message:', text);
-                  }
-                }}
-                className="flex-1 bg-[#10B981] text-white hover:bg-[#059669] rounded-full px-4 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2"
-              >
-                <MessageCircle className="w-4 h-4" />
-                WhatsApp
-              </button>
-              <button
-                data-testid="share-instagram-button"
-                onClick={shareToInstagram}
-                className="flex-1 bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#F77737] text-white hover:opacity-90 rounded-full px-4 py-3 text-sm font-medium transition-all flex items-center justify-center gap-2"
-              >
-                <Instagram className="w-4 h-4" />
-                Instagram
-              </button>
-            </div>
-            
             <div className="flex gap-2">
               <button
                 data-testid="leaderboards-button"
