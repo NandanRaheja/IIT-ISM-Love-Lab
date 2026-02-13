@@ -11,6 +11,7 @@ import Results from './pages/Results';
 import Leaderboards from './pages/Leaderboards';
 import Confessions from './pages/Confessions';
 import Admin from './pages/Admin';
+import PartnerLink from './pages/PartnerLink';
 
 function App() {
   return (
@@ -27,6 +28,8 @@ function App() {
           <Route path="/leaderboards" element={<Leaderboards />} />
           <Route path="/confessions" element={<Confessions />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/partner" element={<PartnerLink />} />
+          <Route path="/partner/:linkId" element={<PartnerLink />} />
         </Routes>
       </BrowserRouter>
     </div>
