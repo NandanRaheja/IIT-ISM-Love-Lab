@@ -101,11 +101,8 @@ const CampusIdentity = () => {
     sessionStorage.setItem('sessionId', sessionId);
     sessionStorage.setItem('campusIdentity', JSON.stringify(identity));
     
-    if (mode === 'couple') {
-      navigate('/couple');
-    } else {
-      navigate('/single');
-    }
+    // Navigate to poster generator first
+    navigate('/poster');
   };
 
   return (

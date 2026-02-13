@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Landing from './pages/Landing';
 import ModeSelection from './pages/ModeSelection';
 import CampusIdentity from './pages/CampusIdentity';
+import PosterGenerator from './pages/PosterGenerator';
 import CoupleQuestionnaire from './pages/CoupleQuestionnaire';
 import SingleQuestionnaire from './pages/SingleQuestionnaire';
 import Results from './pages/Results';
@@ -19,6 +20,7 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/mode" element={<ModeSelection />} />
           <Route path="/identity" element={<CampusIdentity />} />
+          <Route path="/poster" element={<PosterGenerator />} />
           <Route path="/couple" element={<CoupleQuestionnaire />} />
           <Route path="/single" element={<SingleQuestionnaire />} />
           <Route path="/results" element={<Results />} />
