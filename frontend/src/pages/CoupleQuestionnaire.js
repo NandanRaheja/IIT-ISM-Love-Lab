@@ -162,29 +162,7 @@ const CoupleQuestionnaire = () => {
       const sessionId = sessionStorage.getItem('sessionId');
       const campusIdentity = JSON.parse(sessionStorage.getItem('campusIdentity'));
       
-      // Check if this is Partner B joining via a link
-      const partnerLinkId = sessionStorage.getItem('partnerLinkId');
-      const mode = sessionStorage.getItem('mode');
-      
-      if (mode === 'partner' && partnerLinkId) {
-        // Partner B - join the existing session
-        const response = await axios.post(`${API}/partner-link/join`, {
-          link_id: partnerLinkId,
-          session_id: sessionId,
-          campus_identity: campusIdentity,
-          answers: answers
-        });
-        
-        // Clear partner session data
-        sessionStorage.removeItem('partnerLinkId');
-        sessionStorage.setItem('mode', 'couple');
-        
-        // Navigate to results with match data
-        navigate('/partner', { state: { results: response.data } });
-        return;
-      }
-      
-      // Regular couple flow - Submit responses first
+      // Submit responses
       await axios.post(`${API}/responses/couple`, {
         session_id: sessionId,
         campus_identity: campusIdentity,
@@ -192,16 +170,8 @@ const CoupleQuestionnaire = () => {
         ...answers
       });
       
-      // Create partner link for sharing
-      const linkResponse = await axios.post(`${API}/partner-link/create`, {
-        session_id: sessionId,
-        campus_identity: campusIdentity,
-        answers: answers
-      });
-      
-      // Store link ID and navigate to partner link page
-      sessionStorage.setItem('partnerLinkId', linkResponse.data.link_id);
-      navigate('/partner');
+      // Navigate to loading and generate insights
+      navigate('/results', { state: { generating: true } });
     } catch (error) {
       console.error('Error submitting:', error);
       alert('Failed to submit. Please try again.');
