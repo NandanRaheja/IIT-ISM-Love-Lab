@@ -318,6 +318,26 @@ const Results = () => {
               you chose understanding."
             </p>
           </motion.div>
+
+          {/* Partner Match CTA */}
+          {mode === 'couple' && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.5, duration: 1 }}
+              className="mt-8 text-center"
+            >
+              <div className="bg-gradient-to-r from-[#FFF1F2] via-white to-[#FFF1F2] p-6 rounded-2xl border border-[#E11D48]/20">
+                <p 
+                  className="text-2xl text-[#E11D48] font-medium"
+                  style={{ fontFamily: "'Playfair Display', serif" }}
+                >
+                  Match your results with your partner
+                </p>
+                <p className="text-sm text-[#A8A29E] mt-2">Ask them to take the quiz too!</p>
+              </div>
+            </motion.div>
+          )}
         </div>
       </NotebookCard>
     </Layout>
