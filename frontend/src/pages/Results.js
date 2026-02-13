@@ -104,7 +104,7 @@ const Results = () => {
               transition={{ duration: 0.8 }}
             >
               {/* Shareable Card */}
-              <div ref={cardRef} className="bg-[#FDFBF7] p-6 rounded-xl mb-6">
+              <div className="bg-[#FDFBF7] p-6 rounded-xl mb-6">
                 <div className="text-center mb-4">
                   <h1 className="handwritten text-4xl font-bold text-[#E11D48] mb-2">
                     IIT(ISM) Love Lab
