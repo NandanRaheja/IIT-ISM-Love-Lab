@@ -174,11 +174,11 @@ async def generate_insights(request: GenerateInsightsRequest):
         prompt = f"""
 Analyze this IIT(ISM) couple's responses and generate emotional insights:
 
-Campus Identity: {response_doc['campus_identity']['batch']}, {response_doc['campus_identity']['hostel']}, {response_doc['campus_identity']['department']}
+Campus Identity: {response_doc['campus_identity']['year']}, {response_doc['campus_identity']['hostel']}, {response_doc['campus_identity']['department']}
 
-Survived: {response_doc['survived']}
 Story Began: {response_doc['story_began']}
 Texts First: {response_doc['texts_first']}
+Survived: {', '.join(response_doc['survived'])}
 Memory: {response_doc['real_memory']}
 
 Perception Check:
@@ -254,7 +254,7 @@ Be intelligent, warm, slightly witty, and campus-aware. Keep it authentic, not c
         prompt = f"""
 Analyze this IIT(ISM) student's self-awareness responses:
 
-Campus Identity: {response_doc['campus_identity']['batch']}, {response_doc['campus_identity']['hostel']}, {response_doc['campus_identity']['department']}
+Campus Identity: {response_doc['campus_identity']['year']}, {response_doc['campus_identity']['hostel']}, {response_doc['campus_identity']['department']}
 
 Stress Most: {response_doc['stress_most']}
 Feel Appreciated: {response_doc['feel_appreciated']}
