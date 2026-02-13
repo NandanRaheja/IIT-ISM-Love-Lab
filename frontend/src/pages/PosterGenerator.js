@@ -196,7 +196,16 @@ const PosterGenerator = () => {
   const shareToWhatsApp = async () => {
     const text = `🎬 My IIT(ISM) Love Lab Film: "${poster.title}" - ${poster.tagline}`;
     const url = window.location.origin;
-    window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + url)}`;
+    
+    // Create a temporary link and click it
+    const link = document.createElement('a');
+    link.href = whatsappUrl;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const shareToInstagram = async () => {

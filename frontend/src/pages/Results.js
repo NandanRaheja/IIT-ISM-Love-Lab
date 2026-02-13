@@ -61,8 +61,17 @@ const Results = () => {
     const text = mode === 'couple' 
       ? `I got ${insights.perception_score}% perception alignment on IIT(ISM) Love Lab! 💕`
       : `My self-awareness score: ${insights.self_awareness_score}% on IIT(ISM) Love Lab! 🎯`;
-    const url = 'https://valentine-identity.preview.emergentagent.com';
-    window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
+    const url = window.location.origin;
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + url)}`;
+    
+    // Create a temporary link and click it
+    const link = document.createElement('a');
+    link.href = whatsappUrl;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const shareToInstagram = async () => {
