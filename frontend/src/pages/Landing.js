@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Layout from '../components/Layout';
 import NotebookCard from '../components/NotebookCard';
+import { useMusic } from '../context/MusicContext';
 
 const Landing = () => {
   const navigate = useNavigate();
+  const { startMusic } = useMusic();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -50,6 +52,11 @@ const Landing = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  const handleStartExperience = () => {
+    startMusic();
+    navigate('/mode');
+  };
 
   return (
     <Layout>
@@ -116,7 +123,7 @@ const Landing = () => {
           >
             <button
               data-testid="start-button"
-              onClick={() => navigate('/mode')}
+              onClick={handleStartExperience}
               className="w-full bg-[#E11D48] text-white hover:bg-[#BE123C] rounded-full px-8 py-4 font-medium transition-all transform hover:scale-105 active:scale-95 shadow-lg"
             >
               Start Experience
