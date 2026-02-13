@@ -105,7 +105,7 @@ const PosterGenerator = () => {
 
   const releaseLines = [
     'Releasing 14th February. Only at IIT(ISM).',
-    'This Valentine's Day, your story takes the screen.',
+    'This Valentine Day, your story takes the screen.',
     'Premiering this 14th February.',
     'A campus original. 14th February.'
   ];
