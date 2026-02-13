@@ -10,17 +10,17 @@ export const MusicProvider = ({ children }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    // Create audio element with a working royalty-free romantic track
-    audioRef.current = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+    // Create audio element with local romantic track
+    audioRef.current = new Audio('/romantic-bg.mp3');
     audioRef.current.loop = true;
-    audioRef.current.volume = 0.2;
+    audioRef.current.volume = 0.25;
     
     audioRef.current.addEventListener('canplaythrough', () => {
       setIsLoaded(true);
     });
 
     audioRef.current.addEventListener('error', (e) => {
-      console.log('Audio load error, trying fallback');
+      console.log('Audio load error:', e);
     });
 
     return () => {
