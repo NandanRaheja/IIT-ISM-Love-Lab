@@ -194,7 +194,7 @@ const Results = () => {
                   <h3 className="handwritten text-xl font-bold text-[#1C1917] mb-2">
                     Message from 2035:
                   </h3>
-                  <p className="text-[#57534E] italic">{insights.alumni_letter_2035}</p>
+                  <p className="text-[#1C1917] italic">{insights.alumni_letter_2035}</p>
                 </div>
 
                 <div className="text-center py-6 border-t-2 border-b-2 border-[#E11D48]">
