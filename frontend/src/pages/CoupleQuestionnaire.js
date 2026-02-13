@@ -169,6 +169,36 @@ const CoupleQuestionnaire = () => {
                     </button>
                   ))}
                 </div>
+              ) : currentQuestion.type === 'choice_detailed' ? (
+                <div className="space-y-4">
+                  {currentQuestion.options.map((option, index) => (
+                    <button
+                      key={index}
+                      data-testid={`option-${option.heading.toLowerCase().replace(/\s+/g, '-')}`}
+                      onClick={() => setAnswers({...answers, [currentQuestion.id]: option.heading})}
+                      className={`w-full text-left p-6 rounded-xl border-2 transition-all bg-white ${
+                        answers[currentQuestion.id] === option.heading
+                          ? 'border-[#E11D48] shadow-lg shadow-[#E11D48]/20'
+                          : 'border-[#E5E7EB] hover:border-[#E11D48] hover:shadow-md'
+                      }`}
+                    >
+                      <div className={`text-lg font-semibold mb-1 ${
+                        answers[currentQuestion.id] === option.heading
+                          ? 'text-[#E11D48]'
+                          : 'text-[#1C1917]'
+                      }`}>
+                        {option.heading}
+                      </div>
+                      <div className={`text-sm ${
+                        answers[currentQuestion.id] === option.heading
+                          ? 'text-[#E11D48]/80'
+                          : 'text-[#57534E]'
+                      }`}>
+                        {option.subtitle}
+                      </div>
+                    </button>
+                  ))}
+                </div>
               ) : (
                 <textarea
                   data-testid="text-input"
