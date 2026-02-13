@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import Layout from '../components/Layout';
@@ -11,6 +11,7 @@ const API = `${BACKEND_URL}/api`;
 
 const PartnerLink = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { linkId } = useParams();
   
   const [loading, setLoading] = useState(true);
@@ -21,6 +22,13 @@ const PartnerLink = () => {
   const [results, setResults] = useState(null);
 
   useEffect(() => {
+    // Check if results were passed via navigation state (Partner B just submitted)
+    if (location.state?.results) {
+      setResults({ completed: true, ...location.state.results });
+      setLoading(false);
+      return;
+    }
+    
     if (linkId) {
       checkLink();
     } else {
@@ -32,7 +40,7 @@ const PartnerLink = () => {
       }
       setLoading(false);
     }
-  }, [linkId]);
+  }, [linkId, location.state]);
 
   const checkLink = async () => {
     try {
