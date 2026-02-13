@@ -203,7 +203,14 @@ const CampusIdentity = () => {
             
             <button
               data-testid="back-button"
-              onClick={() => navigate('/mode')}
+              onClick={() => {
+                const partnerMode = sessionStorage.getItem('mode');
+                if (partnerMode === 'partner') {
+                  navigate(-1);
+                } else {
+                  navigate('/mode');
+                }
+              }}
               className="w-full text-[#57534E] hover:text-[#1C1917] text-sm transition-colors"
             >
               ← Back
