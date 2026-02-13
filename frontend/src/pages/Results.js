@@ -92,7 +92,7 @@ const Results = () => {
                 />
               ))}
             </div>
-            <p className="text-[#57534E] text-center">
+            <p className="text-[#1C1917] text-center font-medium">
               Analyzing your emotional patterns...
             </p>
           </div>
@@ -106,7 +106,7 @@ const Results = () => {
       <Layout>
         <NotebookCard>
           <div className="flex-1 flex flex-col items-center justify-center">
-            <p className="text-[#57534E] text-center mb-4">Failed to load insights</p>
+            <p className="text-[#1C1917] text-center mb-4 font-medium">Failed to load insights</p>
             <button
               onClick={() => navigate('/')}
               className="bg-[#E11D48] text-white rounded-full px-6 py-3"
@@ -142,7 +142,7 @@ const Results = () => {
                   <div className="text-6xl font-bold text-[#E11D48] mb-2">
                     {insights.perception_score}%
                   </div>
-                  <div className="text-sm text-[#57534E]">Perception Alignment</div>
+                  <div className="text-sm text-[#1C1917] font-medium">Perception Alignment</div>
                   <div className="mt-2 px-4 py-2 bg-[#FFF1F2] rounded-full inline-block">
                     <span className="text-sm font-medium text-[#E11D48]">
                       {insights.relationship_type}
@@ -239,7 +239,7 @@ const Results = () => {
                   <div className="text-5xl font-bold text-[#E11D48] mb-2">
                     {insights.self_awareness_score}%
                   </div>
-                  <div className="text-sm text-[#57534E]">Self-Awareness Score</div>
+                  <div className="text-sm text-[#1C1917] font-medium">Self-Awareness Score</div>
                 </div>
               </div>
 

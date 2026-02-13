@@ -48,7 +48,7 @@ const CampusIdentity = () => {
             Campus Identity
           </h2>
           
-          <p className="text-[#57534E] mb-8 text-sm">
+          <p className="text-[#1C1917] mb-8 text-sm font-medium">
             Anonymous. Only for stats.
           </p>
 

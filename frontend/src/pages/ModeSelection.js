@@ -20,7 +20,7 @@ const ModeSelection = () => {
             Choose Your Path
           </h2>
           
-          <p className="text-[#57534E] text-center mb-12">
+          <p className="text-[#1C1917] text-center mb-12">
             Select the experience that fits you
           </p>
 

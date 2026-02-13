@@ -82,7 +82,7 @@ const Confessions = () => {
             <h1 className="handwritten text-4xl font-bold text-[#E11D48] mb-2">
               Confession Wall
             </h1>
-            <p className="text-[#57534E] text-sm">
+            <p className="text-[#1C1917] text-sm font-medium">
               Anonymous. Moderated. 24-hour visibility.
             </p>
           </div>

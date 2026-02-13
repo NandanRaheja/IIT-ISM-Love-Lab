@@ -54,7 +54,7 @@ const Landing = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-[#57534E] text-base md:text-lg mb-8"
+            className="text-[#1C1917] text-base md:text-lg mb-8"
           >
             Anonymous Valentine Social Experiment 2026
           </motion.p>
@@ -65,23 +65,23 @@ const Landing = () => {
             transition={{ delay: 0.6 }}
             className="mb-8 space-y-2"
           >
-            <p className="text-sm text-[#57534E]">Event ends in:</p>
+            <p className="text-sm text-[#1C1917] font-medium">Event ends in:</p>
             <div className="flex gap-4 justify-center">
               <div className="text-center">
                 <div className="text-3xl font-bold text-[#E11D48]">{timeLeft.days}</div>
-                <div className="text-xs text-[#A8A29E]">Days</div>
+                <div className="text-xs text-[#57534E] font-medium">Days</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-[#E11D48]">{timeLeft.hours}</div>
-                <div className="text-xs text-[#A8A29E]">Hours</div>
+                <div className="text-xs text-[#57534E] font-medium">Hours</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-[#E11D48]">{timeLeft.minutes}</div>
-                <div className="text-xs text-[#A8A29E]">Mins</div>
+                <div className="text-xs text-[#57534E] font-medium">Mins</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-[#E11D48]">{timeLeft.seconds}</div>
-                <div className="text-xs text-[#A8A29E]">Secs</div>
+                <div className="text-xs text-[#57534E] font-medium">Secs</div>
               </div>
             </div>
           </motion.div>
@@ -122,7 +122,7 @@ const Landing = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1 }}
-            className="mt-8 text-xs text-[#A8A29E] italic"
+            className="mt-8 text-xs text-[#57534E] italic font-medium"
           >
             Completely anonymous. No login required.
           </motion.p>

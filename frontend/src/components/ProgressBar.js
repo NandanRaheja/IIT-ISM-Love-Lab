@@ -4,7 +4,7 @@ const ProgressBar = ({ current, total }) => {
   return (
     <div className="w-full mb-6">
       <div className="flex justify-between items-center mb-2">
-        <span className="text-xs font-medium text-[#57534E]">Question {current} of {total}</span>
+        <span className="text-xs font-bold text-[#1C1917]">Question {current} of {total}</span>
         <span className="text-xs font-bold text-[#E11D48]">{Math.round(percentage)}%</span>
       </div>
       <div className="w-full h-2 bg-[#FFE4E6] overflow-hidden rounded-full shadow-inner">
