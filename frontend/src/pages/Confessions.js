@@ -18,9 +18,18 @@ const Confessions = () => {
   const [showWordCloud, setShowWordCloud] = useState(false);
   const [newConfession, setNewConfession] = useState('');
   const [identity, setIdentity] = useState({
+    year: '',
     hostel: '',
     department: ''
   });
+
+  const years = [
+    { emoji: '🎬', title: 'Fresh Release', year: '1st Year' },
+    { emoji: '🎭', title: 'Interval Complications', year: '2nd Year' },
+    { emoji: '🔥', title: 'Emotional Plot Twist', year: '3rd Year' },
+    { emoji: '🌅', title: 'Pre-Climax Realisation', year: '4th Year' },
+    { emoji: '🏁', title: 'Grand Finale Season', year: '5th Year / Dual Degree' }
+  ];
 
   useEffect(() => {
     fetchConfessions();
@@ -48,7 +57,7 @@ const Confessions = () => {
   };
 
   const submitConfession = async () => {
-    if (!newConfession.trim() || !identity.hostel || !identity.department) {
+    if (!newConfession.trim() || !identity.year || !identity.hostel || !identity.department) {
       alert('Please fill all fields');
       return;
     }
@@ -174,6 +183,20 @@ const Confessions = () => {
                   placeholder="Share your anonymous confession..."
                   className="w-full bg-white border-2 border-[#E5E7EB] rounded-lg px-4 py-3 text-[#1C1917] focus:ring-2 focus:ring-[#E11D48] focus:border-transparent outline-none resize-none min-h-[100px]"
                 />
+
+                <select
+                  data-testid="year-select"
+                  value={identity.year}
+                  onChange={(e) => setIdentity({...identity, year: e.target.value})}
+                  className="w-full bg-white/80 backdrop-blur-sm border-2 border-[#E5E7EB] rounded-xl px-4 py-2 text-sm text-[#1C1917] font-medium focus:ring-2 focus:ring-[#E11D48] outline-none"
+                >
+                  <option value="" className="text-[#A8A29E]">Select movie part</option>
+                  {years.map(yr => (
+                    <option key={yr.year} value={yr.year} className="text-[#1C1917]">
+                      {yr.emoji} {yr.title}
+                    </option>
+                  ))}
+                </select>
 
                 <select
                   data-testid="hostel-select"

@@ -10,11 +10,18 @@ const CampusIdentity = () => {
   const mode = sessionStorage.getItem('mode');
   
   const [identity, setIdentity] = useState({
+    year: '',
     hostel: '',
     department: ''
   });
 
-  const batches = ['B.Tech./Int.M.Tech.', 'M.Tech', 'M.Sc Tech', 'MBA'];
+  const years = [
+    { emoji: '🎬', title: 'Fresh Release', subtitle: 'Everything feels cinematic.', year: '1st Year' },
+    { emoji: '🎭', title: 'Interval Complications', subtitle: 'The plot is getting interesting.', year: '2nd Year' },
+    { emoji: '🔥', title: 'Emotional Plot Twist', subtitle: "You didn't see this coming.", year: '3rd Year' },
+    { emoji: '🌅', title: 'Pre-Climax Realisation', subtitle: 'Some choices start to matter.', year: '4th Year' },
+    { emoji: '🏁', title: 'Grand Finale Season', subtitle: 'Endings and new beginnings.', year: '5th Year / Dual Degree' }
+  ];
   const hostels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
   const departments = [
     {
@@ -85,7 +92,7 @@ const CampusIdentity = () => {
   ];
 
   const handleNext = () => {
-    if (!identity.hostel || !identity.department) {
+    if (!identity.year || !identity.hostel || !identity.department) {
       alert('Please fill all fields');
       return;
     }
@@ -116,6 +123,29 @@ const CampusIdentity = () => {
           </div>
 
           <div className="space-y-6 flex-1">
+            <div>
+              <label className="block text-sm font-medium text-[#1C1917] mb-2">
+                🎬 Which Part of the Movie Are You In? <span className="text-[#E11D48]">*</span>
+              </label>
+              <select
+                data-testid="year-select"
+                value={identity.year}
+                onChange={(e) => setIdentity({...identity, year: e.target.value})}
+                className="w-full bg-white/80 backdrop-blur-sm border-2 border-[#E5E7EB] rounded-2xl px-4 py-4 text-[#1C1917] font-medium focus:ring-2 focus:ring-[#E11D48] focus:border-[#E11D48] focus:shadow-lg focus:shadow-[#E11D48]/20 outline-none transition-all duration-300"
+              >
+                <option value="" className="text-[#A8A29E]">Select your part...</option>
+                {years.map(yr => (
+                  <option 
+                    key={yr.year} 
+                    value={yr.year}
+                    className="text-[#1C1917] py-3"
+                  >
+                    {yr.emoji} {yr.title} - {yr.subtitle}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-[#1C1917] mb-2">
                 Hostel <span className="text-[#E11D48]">*</span>
