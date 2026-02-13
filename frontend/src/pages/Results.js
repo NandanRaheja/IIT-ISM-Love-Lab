@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
@@ -11,7 +11,6 @@ const API = `${BACKEND_URL}/api`;
 const Results = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const cardRef = useRef(null);
   
   const [loading, setLoading] = useState(true);
   const [insights, setInsights] = useState(null);
@@ -38,74 +37,6 @@ const Results = () => {
       console.error('Error generating insights:', error);
       alert('Failed to generate insights');
       setLoading(false);
-    }
-  };
-
-  const downloadCard = async () => {
-    if (cardRef.current) {
-      const canvas = await html2canvas(cardRef.current, {
-        backgroundColor: '#FDFBF7',
-        scale: 2
-      });
-      
-      const link = document.createElement('a');
-      link.download = 'iitism-love-lab-result.png';
-      link.href = canvas.toDataURL();
-      link.click();
-    }
-  };
-
-  const shareToWhatsApp = async () => {
-    const text = mode === 'couple' 
-      ? `I got ${insights.perception_score}% perception alignment on IIT(ISM) Love Lab! 💕`
-      : `My self-awareness score: ${insights.self_awareness_score}% on IIT(ISM) Love Lab! 🎯`;
-    const url = window.location.origin;
-    const fullText = text + ' ' + url;
-    
-    // Try native share first (works best on mobile)
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'IIT(ISM) Love Lab',
-          text: fullText
-        });
-        return;
-      } catch (err) {
-        // User cancelled or share failed, fall through to copy
-      }
-    }
-    
-    // Fallback: copy to clipboard
-    try {
-      await navigator.clipboard.writeText(fullText);
-      alert('Message copied! Paste it in WhatsApp to share.');
-    } catch (err) {
-      // Final fallback: prompt with text
-      prompt('Copy this message and share on WhatsApp:', fullText);
-    }
-  };
-
-  const shareToInstagram = async () => {
-    // Download the image first, then prompt user to share
-    if (cardRef.current) {
-      const canvas = await html2canvas(cardRef.current, {
-        backgroundColor: '#FDFBF7',
-        scale: 2
-      });
-      
-      // Convert to blob for better handling
-      canvas.toBlob((blob) => {
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.download = 'iitism-love-lab-result.png';
-        link.href = url;
-        link.click();
-        
-        // Show instruction after download
-        setTimeout(() => {
-          alert('Your result card has been downloaded! Open Instagram and share it to your story.');
-        }, 500);
-      }, 'image/png');
     }
   };
 
