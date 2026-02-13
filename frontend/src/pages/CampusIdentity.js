@@ -148,17 +148,17 @@ const CampusIdentity = () => {
 
             <div>
               <label className="block text-sm font-medium text-[#1C1917] mb-2">
-                Hostel <span className="text-[#E11D48]">*</span>
+                🎬 Where Is Your Story Shot? <span className="text-[#E11D48]">*</span>
               </label>
               <select
                 data-testid="hostel-select"
                 value={identity.hostel}
                 onChange={(e) => setIdentity({...identity, hostel: e.target.value})}
-                className="w-full bg-white border-2 border-[#E5E7EB] rounded-lg px-4 py-3 text-[#57534E] font-medium focus:ring-2 focus:ring-[#E11D48] focus:border-transparent outline-none"
+                className="w-full bg-white/80 backdrop-blur-sm border-2 border-[#E5E7EB] rounded-2xl px-4 py-4 text-[#1C1917] font-medium focus:ring-2 focus:ring-[#E11D48] focus:border-[#E11D48] focus:shadow-lg focus:shadow-[#E11D48]/20 outline-none transition-all duration-300"
               >
-                <option value="" className="text-[#A8A29E]">Select your hostel</option>
+                <option value="" className="text-[#A8A29E]">Select your location...</option>
                 {hostels.map(h => (
-                  <option key={h} value={h} className="text-[#57534E]">Hostel {h}</option>
+                  <option key={h} value={h} className="text-[#1C1917]">{h}</option>
                 ))}
               </select>
             </div>
