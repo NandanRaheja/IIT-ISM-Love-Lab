@@ -7,6 +7,7 @@ import HowItWorksSection from './components/HowItWorksSection';
 import WhyDeployrSection from './components/WhyDeployrSection';
 import ResultsSection from './components/ResultsSection';
 import OutputProofSection from './components/OutputProofSection';
+import NewsletterSection from './components/NewsletterSection';
 import CommunitySection from './components/CommunitySection';
 import WaitlistForm from './components/WaitlistForm';
 import DualCTASection from './components/DualCTASection';
@@ -65,6 +66,9 @@ function App() {
       
       {/* Results Section */}
       <ResultsSection />
+      
+      {/* Newsletter Section */}
+      <NewsletterSection />
       
       {/* Community Section */}
       <CommunitySection onApplyClick={scrollToWaitlist} />

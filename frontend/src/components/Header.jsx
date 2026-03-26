@@ -9,6 +9,7 @@ const Header = ({ onApplyClick }) => {
     { label: 'Agents', href: '#agents' },
     { label: 'How It Works', href: '#how-it-works' },
     { label: 'Why Us', href: '#why' },
+    { label: 'Newsletter', href: '#newsletter' },
     { label: 'Community', href: '#community' },
   ];
 
