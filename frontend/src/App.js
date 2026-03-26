@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import '@/App.css';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
@@ -14,11 +15,13 @@ import DualCTASection from './components/DualCTASection';
 import ViralLoopSection from './components/ViralLoopSection';
 import Footer from './components/Footer';
 import AgentDemo from './components/AgentDemo';
+import LearnPage from './components/LearnPage';
 
 // WhatsApp community link (placeholder)
 const WHATSAPP_LINK = 'https://chat.whatsapp.com/placeholder-invite-link';
 
-function App() {
+// Home page component
+const HomePage = () => {
   const [isDemoOpen, setIsDemoOpen] = useState(false);
 
   const scrollToWaitlist = () => {
@@ -30,10 +33,6 @@ function App() {
 
   const openWhatsApp = () => {
     window.open(WHATSAPP_LINK, '_blank', 'noopener,noreferrer');
-  };
-
-  const openDemo = () => {
-    setIsDemoOpen(true);
   };
 
   return (
@@ -91,6 +90,17 @@ function App() {
       {/* Agent Demo Modal */}
       <AgentDemo isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </div>
+  );
+};
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/learn" element={<LearnPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

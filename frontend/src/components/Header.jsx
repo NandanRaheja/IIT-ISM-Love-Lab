@@ -7,11 +7,12 @@ const Header = ({ onApplyClick }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { label: 'Agents', href: '#agents' },
-    { label: 'How It Works', href: '#how-it-works' },
-    { label: 'Why Us', href: '#why' },
-    { label: 'Newsletter', href: '#newsletter' },
-    { label: 'Community', href: '#community' },
+    { label: 'Agents', href: '/#agents' },
+    { label: 'How It Works', href: '/#how-it-works' },
+    { label: 'Learn', href: '/learn' },
+    { label: 'Why Us', href: '/#why' },
+    { label: 'Newsletter', href: '/#newsletter' },
+    { label: 'Community', href: '/#community' },
   ];
 
   return (
