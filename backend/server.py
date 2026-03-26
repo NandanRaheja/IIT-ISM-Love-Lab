@@ -382,21 +382,18 @@ async def run_retention_agent(request: RetentionAgentRequest):
         )
     
     try:
-        # Prepare the payload - try wrapping in 'data' or 'inputs' as Airtop may expect
-        inner_payload = {
-            "audienceType": request.audienceType,
-            "platform": request.platform,
-            "topic": request.topic
+        # Prepare payload with configVars wrapper as Airtop expects
+        payload = {
+            "configVars": {
+                "audienceType": request.audienceType,
+                "platform": request.platform,
+                "topic": request.topic,
+                "creatorNiche": request.creatorNiche or "",
+                "script": request.script or ""
+            }
         }
         
-        # Add optional fields if provided
-        if request.creatorNiche:
-            inner_payload["creatorNiche"] = request.creatorNiche
-        if request.script:
-            inner_payload["script"] = request.script
-        
-        # Try different payload formats that Airtop webhook might expect
-        payload = {"data": inner_payload}
+        logging.info(f"Sending retention agent request: {payload}")
         
         # Make the webhook request
         async with httpx.AsyncClient(timeout=120.0) as client:
@@ -409,30 +406,23 @@ async def run_retention_agent(request: RetentionAgentRequest):
                 }
             )
             
-            # If data wrapper fails, try without wrapper
-            if response.status_code == 422:
-                response = await client.post(
-                    webhook_url,
-                    json=inner_payload,
-                    headers={
-                        "Authorization": f"Bearer {api_key}",
-                        "Content-Type": "application/json"
-                    }
-                )
-            
-            # If still fails, try with 'inputs' wrapper
-            if response.status_code == 422:
-                response = await client.post(
-                    webhook_url,
-                    json={"inputs": inner_payload},
-                    headers={
-                        "Authorization": f"Bearer {api_key}",
-                        "Content-Type": "application/json"
-                    }
-                )
+            logging.info(f"Retention webhook response: {response.status_code} - {response.text[:500]}")
             
             if response.status_code == 200:
                 data = response.json()
+                
+                # If we get an invocationId, we need to poll for results
+                if "invocationId" in data:
+                    invocation_id = data["invocationId"]
+                    # Return the invocation info - results will be async
+                    return {
+                        "success": True,
+                        "status": "processing",
+                        "invocationId": invocation_id,
+                        "message": "Agent is processing. Results will be available shortly.",
+                        "source": "airtop_retention_webhook"
+                    }
+                
                 return {
                     "success": True,
                     "data": data,

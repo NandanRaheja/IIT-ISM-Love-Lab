@@ -6,13 +6,10 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
 const audienceTypes = [
-  { value: 'general', label: 'General Audience' },
-  { value: 'beginners', label: 'Beginners' },
-  { value: 'intermediate', label: 'Intermediate' },
-  { value: 'experts', label: 'Experts/Advanced' },
-  { value: 'young_adults', label: 'Young Adults (18-25)' },
-  { value: 'professionals', label: 'Professionals' },
-  { value: 'creators', label: 'Content Creators' }
+  { value: 'Students', label: 'Students' },
+  { value: 'Professionals', label: 'Professionals' },
+  { value: 'Creators', label: 'Creators' },
+  { value: 'Entrepreneurs', label: 'Entrepreneurs' }
 ];
 
 const platforms = [
@@ -74,10 +71,19 @@ const RetentionAgentModal = ({ isOpen, onClose }) => {
         timeout: 120000 
       });
 
-      if (response.data.success && response.data.data) {
-        setResults(response.data.data);
-      } else if (response.data) {
-        setResults(response.data);
+      if (response.data.success) {
+        // Check if it's still processing (async)
+        if (response.data.status === 'processing') {
+          setResults({
+            status: 'processing',
+            invocationId: response.data.invocationId,
+            message: response.data.message
+          });
+        } else if (response.data.data) {
+          setResults(response.data.data);
+        } else {
+          setResults(response.data);
+        }
       } else {
         setError('No results returned from agent');
       }
@@ -269,8 +275,27 @@ const RetentionAgentModal = ({ isOpen, onClose }) => {
           ) : (
             /* Results */
             <div data-testid="retention-results" className="space-y-6">
+              {/* Processing state */}
+              {results.status === 'processing' && (
+                <div className="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-6 text-center">
+                  <Loader2 className="w-8 h-8 text-blue-400 animate-spin mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-white mb-2">
+                    Agent is Processing
+                  </h3>
+                  <p className="text-sm text-zinc-400 mb-4">
+                    {results.message || "Your retention strategy is being analyzed..."}
+                  </p>
+                  <p className="text-xs text-zinc-500">
+                    Invocation ID: {results.invocationId}
+                  </p>
+                  <p className="text-xs text-zinc-500 mt-2">
+                    The agent is running. Results will appear in your Airtop dashboard.
+                  </p>
+                </div>
+              )}
+
               {/* Display results - handle various response formats */}
-              {typeof results === 'object' && (
+              {results.status !== 'processing' && typeof results === 'object' && (
                 <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6">
                   <h3 className="text-lg font-medium text-white mb-4 flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-400" />
