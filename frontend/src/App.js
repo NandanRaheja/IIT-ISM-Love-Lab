@@ -16,6 +16,7 @@ import ViralLoopSection from './components/ViralLoopSection';
 import Footer from './components/Footer';
 import AgentDemo from './components/AgentDemo';
 import LearnPage from './components/LearnPage';
+import FloatingLearnButton from './components/FloatingLearnButton';
 
 // WhatsApp community link (placeholder)
 const WHATSAPP_LINK = 'https://chat.whatsapp.com/placeholder-invite-link';
@@ -89,6 +90,9 @@ const HomePage = () => {
 
       {/* Agent Demo Modal */}
       <AgentDemo isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
+      
+      {/* Floating Learn Button */}
+      <FloatingLearnButton />
     </div>
   );
 };

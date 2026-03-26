@@ -9,7 +9,6 @@ const Header = ({ onApplyClick }) => {
   const navLinks = [
     { label: 'Agents', href: '/#agents' },
     { label: 'How It Works', href: '/#how-it-works' },
-    { label: 'Learn', href: '/learn' },
     { label: 'Why Us', href: '/#why' },
     { label: 'Newsletter', href: '/#newsletter' },
     { label: 'Community', href: '/#community' },
