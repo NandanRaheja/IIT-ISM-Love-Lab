@@ -1,5 +1,6 @@
 import React from 'react';
-import { Sparkles, Twitter, Linkedin, Youtube } from 'lucide-react';
+import { Twitter, Linkedin, Youtube } from 'lucide-react';
+import DeployrLogo from './DeployrLogo';
 
 const Footer = () => {
   return (
@@ -11,10 +12,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* Logo & Tagline */}
           <div className="md:col-span-2">
-            <a href="/" className="flex items-center gap-2 group mb-4">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
-                <Sparkles className="w-4 h-4 text-white" />
-              </div>
+            <a href="/" className="flex items-center gap-2.5 group mb-4">
+              <DeployrLogo size={36} className="group-hover:drop-shadow-[0_0_12px_rgba(139,92,246,0.5)] transition-all" />
               <span className="text-xl font-semibold text-white font-outfit tracking-tight">
                 Deployr<span className="text-purple-400">AI</span>
               </span>

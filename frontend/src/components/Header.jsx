@@ -1,6 +1,7 @@
 import React from 'react';
-import { Sparkles, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import DeployrLogo from './DeployrLogo';
 
 const Header = ({ onApplyClick }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -24,11 +25,9 @@ const Header = ({ onApplyClick }) => {
           <a 
             href="/"
             data-testid="logo"
-            className="flex items-center gap-2 group"
+            className="flex items-center gap-2.5 group"
           >
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center group-hover:shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-shadow">
-              <Sparkles className="w-4 h-4 text-white" />
-            </div>
+            <DeployrLogo size={36} className="group-hover:drop-shadow-[0_0_12px_rgba(139,92,246,0.5)] transition-all" />
             <span className="text-xl font-semibold text-white font-outfit tracking-tight">
               Deployr<span className="text-purple-400">AI</span>
             </span>
