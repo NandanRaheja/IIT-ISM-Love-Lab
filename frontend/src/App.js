@@ -10,13 +10,13 @@ import ResultsSection from './components/ResultsSection';
 import OutputProofSection from './components/OutputProofSection';
 import NewsletterSection from './components/NewsletterSection';
 import CommunitySection from './components/CommunitySection';
-import WaitlistForm from './components/WaitlistForm';
 import DualCTASection from './components/DualCTASection';
 import ViralLoopSection from './components/ViralLoopSection';
 import Footer from './components/Footer';
 import AgentDemo from './components/AgentDemo';
 import LearnPage from './components/LearnPage';
 import FloatingLearnButton from './components/FloatingLearnButton';
+import WaitlistModal from './components/WaitlistModal';
 
 // WhatsApp community link (placeholder)
 const WHATSAPP_LINK = 'https://chat.whatsapp.com/placeholder-invite-link';
@@ -24,12 +24,10 @@ const WHATSAPP_LINK = 'https://chat.whatsapp.com/placeholder-invite-link';
 // Home page component
 const HomePage = () => {
   const [isDemoOpen, setIsDemoOpen] = useState(false);
+  const [isWaitlistOpen, setIsWaitlistOpen] = useState(false);
 
-  const scrollToWaitlist = () => {
-    const element = document.getElementById('waitlist');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+  const openWaitlistModal = () => {
+    setIsWaitlistOpen(true);
   };
 
   const openWhatsApp = () => {
@@ -42,11 +40,11 @@ const HomePage = () => {
       <div className="noise-overlay" />
       
       {/* Header */}
-      <Header onApplyClick={scrollToWaitlist} />
+      <Header onApplyClick={openWaitlistModal} />
       
       {/* Hero Section */}
       <HeroSection 
-        onApplyClick={scrollToWaitlist} 
+        onApplyClick={openWaitlistModal} 
         onCommunityClick={openWhatsApp}
       />
       
@@ -71,14 +69,11 @@ const HomePage = () => {
       <NewsletterSection />
       
       {/* Community Section */}
-      <CommunitySection onApplyClick={scrollToWaitlist} />
-      
-      {/* Waitlist Form */}
-      <WaitlistForm />
+      <CommunitySection onApplyClick={openWaitlistModal} />
       
       {/* Dual CTA Section */}
       <DualCTASection 
-        onApplyClick={scrollToWaitlist} 
+        onApplyClick={openWaitlistModal} 
         onCommunityClick={openWhatsApp}
       />
       
@@ -90,6 +85,9 @@ const HomePage = () => {
 
       {/* Agent Demo Modal */}
       <AgentDemo isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
+      
+      {/* Waitlist Modal */}
+      <WaitlistModal isOpen={isWaitlistOpen} onClose={() => setIsWaitlistOpen(false)} />
       
       {/* Floating Learn Button */}
       <FloatingLearnButton />
