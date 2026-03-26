@@ -63,13 +63,26 @@ const VideoModal = ({ isOpen, video, onClose }) => {
           </video>
         ) : video.embedUrl ? (
           // If embed URL (YouTube/Vimeo) is provided
-          <iframe
-            src={video.embedUrl}
-            className="w-full h-full"
-            title={video.title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
+          <div className="relative w-full h-full">
+            <iframe
+              src={video.embedUrl}
+              className="w-full h-full"
+              title={video.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+            {/* Fallback link if embedding doesn't work */}
+            {video.youtubeUrl && (
+              <a
+                href={video.youtubeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="absolute bottom-4 right-4 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-sm text-white hover:bg-white/20 transition-colors"
+              >
+                Watch on YouTube
+              </a>
+            )}
+          </div>
         ) : (
           // Placeholder state - shows thumbnail with play overlay
           <div className="relative w-full h-full flex items-center justify-center">
