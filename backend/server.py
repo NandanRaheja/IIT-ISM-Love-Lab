@@ -49,8 +49,15 @@ class AirtopAgentRequest(BaseModel):
     platform: str = "YouTube"
     goal: str = "grow"
     content_type: str = "short-form video"
-    agent_type: str = "full_pipeline"  # Options: trend_scout, script_writer, strategy, full_pipeline
+    agent_type: str = "full_pipeline"  # Options: trend_scout, script_writer, strategy, retention, full_pipeline
     target_url: Optional[str] = None  # Optional URL for web research
+
+class RetentionAgentRequest(BaseModel):
+    """Request model for Retention Strategy Agent webhook"""
+    niche: str
+    platform: str = "YouTube"
+    content_type: str = "short-form video"
+    video_url: Optional[str] = None  # Optional video URL to analyze
 
 class WaitlistEntry(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -354,6 +361,75 @@ async def run_airtop_workflow(request: AirtopAgentRequest):
     """
     return await run_airtop_agent(request)
 
+@api_router.post("/agents/retention", response_model=dict)
+async def run_retention_agent(request: RetentionAgentRequest):
+    """
+    Retention Strategy Agent - uses Airtop webhook endpoint.
+    Optimizes watch time and engagement strategies.
+    
+    API key loaded from environment - NEVER exposed to client.
+    """
+    import httpx
+    
+    webhook_url = os.environ.get('AIRTOP_RETENTION_WEBHOOK')
+    api_key = os.environ.get('AIRTOP_RETENTION_API_KEY')
+    
+    if not webhook_url or not api_key:
+        raise HTTPException(
+            status_code=500,
+            detail="Retention agent not configured. Set AIRTOP_RETENTION_WEBHOOK and AIRTOP_RETENTION_API_KEY."
+        )
+    
+    try:
+        # Prepare the payload for the webhook
+        payload = {
+            "niche": request.niche,
+            "platform": request.platform,
+            "content_type": request.content_type,
+            "video_url": request.video_url,
+            "prompt": f"""Analyze retention strategies for {request.niche} content on {request.platform}.
+            
+Provide:
+1. retention_hooks: Array of 3-5 techniques to hook viewers in the first 3 seconds
+2. engagement_tactics: Array of 3-5 tactics to maintain engagement throughout
+3. pacing_tips: Array of 3-5 tips for optimal content pacing
+4. cta_strategies: Array of 3-5 effective call-to-action strategies
+5. watch_time_tips: String with overall advice for maximizing watch time
+
+Return as JSON with these exact keys."""
+        }
+        
+        # Make the webhook request
+        async with httpx.AsyncClient(timeout=120.0) as client:
+            response = await client.post(
+                webhook_url,
+                json=payload,
+                headers={
+                    "Authorization": f"Bearer {api_key}",
+                    "Content-Type": "application/json"
+                }
+            )
+            
+            if response.status_code == 200:
+                data = response.json()
+                return {
+                    "success": True,
+                    "data": data,
+                    "source": "airtop_retention_webhook"
+                }
+            else:
+                logging.error(f"Retention webhook error: {response.status_code} - {response.text}")
+                raise HTTPException(
+                    status_code=response.status_code,
+                    detail=f"Retention agent error: {response.text}"
+                )
+                
+    except httpx.TimeoutException:
+        raise HTTPException(status_code=504, detail="Retention agent timeout. Please try again.")
+    except Exception as e:
+        logging.error(f"Retention agent error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Retention agent error: {str(e)}")
+
 @api_router.get("/agents/status")
 async def get_agent_status():
     """
@@ -362,9 +438,17 @@ async def get_agent_status():
     """
     return {
         "airtop_configured": bool(os.environ.get('AIRTOP_API_KEY')),
+        "retention_configured": bool(os.environ.get('AIRTOP_RETENTION_WEBHOOK') and os.environ.get('AIRTOP_RETENTION_API_KEY')),
         "openai_configured": bool(os.environ.get('OPENAI_API_KEY')),
         "emergent_configured": bool(os.environ.get('EMERGENT_LLM_KEY')),
-        "recommended": "airtop" if os.environ.get('AIRTOP_API_KEY') else "openai"
+        "agents": {
+            "trend_scout": "live" if os.environ.get('AIRTOP_API_KEY') else "not configured",
+            "retention_strategy": "live" if os.environ.get('AIRTOP_RETENTION_WEBHOOK') else "not configured",
+            "script_writer": "coming soon",
+            "content_strategy": "coming soon",
+            "monetization": "coming soon",
+            "visual_story": "coming soon"
+        }
     }
 
 # ==================== WAITLIST ENDPOINT ====================

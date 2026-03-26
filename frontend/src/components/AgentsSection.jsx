@@ -10,6 +10,7 @@ import {
   Play
 } from 'lucide-react';
 import TrendScoutModal from './TrendScoutModal';
+import RetentionAgentModal from './RetentionAgentModal';
 
 const agents = [
   {
@@ -17,51 +18,60 @@ const agents = [
     description: 'Finds what\'s working now across platforms in real-time',
     icon: TrendingUp,
     color: 'from-purple-500 to-violet-500',
-    isActive: true // This agent is clickable
+    isActive: true,
+    modalType: 'trend_scout'
   },
   {
     name: 'Retention Strategy Agent',
     description: 'Optimizes watch time and keeps viewers hooked till the end',
     icon: Timer,
     color: 'from-blue-500 to-cyan-500',
-    isActive: false
+    isActive: true,
+    modalType: 'retention'
   },
   {
     name: 'Viral Scriptwriter',
     description: 'Creates high-retention scripts with proven hooks and payoffs',
     icon: Pen,
     color: 'from-violet-500 to-purple-500',
-    isActive: false
+    isActive: false,
+    modalType: null
   },
   {
     name: 'Content Strategy Expert',
     description: 'Builds intelligent posting plans aligned with your goals',
     icon: LayoutGrid,
     color: 'from-indigo-500 to-blue-500',
-    isActive: false
+    isActive: false,
+    modalType: null
   },
   {
     name: 'Monetization Agent',
     description: 'Turns content into income with strategic revenue paths',
     icon: DollarSign,
     color: 'from-emerald-500 to-teal-500',
-    isActive: false
+    isActive: false,
+    modalType: null
   },
   {
     name: 'Visual Story Agent',
     description: 'Generates AI visuals & cinematic outputs for your content',
     icon: Sparkles,
     color: 'from-pink-500 to-rose-500',
-    isActive: false
+    isActive: false,
+    modalType: null
   }
 ];
 
 const AgentsSection = () => {
   const [isTrendScoutOpen, setIsTrendScoutOpen] = useState(false);
+  const [isRetentionOpen, setIsRetentionOpen] = useState(false);
 
-  const handleAgentClick = (agent, index) => {
-    if (index === 0) { // Trend Scout Agent
+  const handleAgentClick = (agent) => {
+    if (agent.modalType === 'trend_scout') {
       setIsTrendScoutOpen(true);
+    } else if (agent.modalType === 'retention') {
+      setIsRetentionOpen(true);
     }
   };
 
@@ -100,7 +110,7 @@ const AgentsSection = () => {
             <div
               key={agent.name}
               data-testid={`agent-card-${index}`}
-              onClick={() => handleAgentClick(agent, index)}
+              onClick={() => handleAgentClick(agent)}
               className={`group bg-[#12121A]/80 backdrop-blur-xl border border-white/5 rounded-3xl p-8 hover:bg-white/[0.04] hover:border-purple-500/30 transition-all duration-500 relative overflow-hidden opacity-0 animate-fade-in-up ${
                 agent.isActive ? 'cursor-pointer' : 'cursor-default'
               }`}
@@ -159,6 +169,12 @@ const AgentsSection = () => {
       <TrendScoutModal 
         isOpen={isTrendScoutOpen} 
         onClose={() => setIsTrendScoutOpen(false)} 
+      />
+
+      {/* Retention Agent Modal */}
+      <RetentionAgentModal
+        isOpen={isRetentionOpen}
+        onClose={() => setIsRetentionOpen(false)}
       />
     </section>
   );
