@@ -17,7 +17,7 @@ const HeroSection = ({ onApplyClick, onCommunityClick }) => {
       <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-8 text-center">
         {/* Badge */}
         <div 
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-8 opacity-0 animate-fade-in-up"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6 opacity-0 animate-fade-in-up"
           style={{ animationDelay: '0s', animationFillMode: 'forwards' }}
         >
           <Zap className="w-4 h-4 text-purple-400" />
@@ -25,6 +25,14 @@ const HeroSection = ({ onApplyClick, onCommunityClick }) => {
             Limited Access
           </span>
         </div>
+
+        {/* Trust Line - Visible First */}
+        <p 
+          className="text-sm text-zinc-400 mb-6 opacity-0 animate-fade-in-up"
+          style={{ animationDelay: '0.05s', animationFillMode: 'forwards' }}
+        >
+          Built by creators. Backed by real AI filmmaking and automation experience.
+        </p>
 
         {/* Main Headline */}
         <h1 
@@ -86,16 +94,6 @@ const HeroSection = ({ onApplyClick, onCommunityClick }) => {
         >
           Limited spots. Rolling access.
         </p>
-
-        {/* Trust Line */}
-        <div 
-          className="mt-16 pt-8 border-t border-white/5 opacity-0 animate-fade-in-up"
-          style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}
-        >
-          <p className="text-sm text-zinc-600">
-            Built by creators. Backed by real AI filmmaking and automation experience.
-          </p>
-        </div>
       </div>
     </section>
   );
