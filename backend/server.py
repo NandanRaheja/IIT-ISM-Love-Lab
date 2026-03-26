@@ -31,6 +31,7 @@ class AgentRequest(BaseModel):
     platform: str = "YouTube"
     goal: str = "grow"
     content_type: str = "short-form video"
+    use_airtop: bool = False  # Flag to use Airtop agents
 
 class AgentResponse(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -39,7 +40,17 @@ class AgentResponse(BaseModel):
     hooks: List[str]
     script: str
     strategy: str
+    source: str = "openai"  # "airtop" or "openai"
     timestamp: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+class AirtopAgentRequest(BaseModel):
+    """Request model specifically for Airtop agent workflows"""
+    niche: str
+    platform: str = "YouTube"
+    goal: str = "grow"
+    content_type: str = "short-form video"
+    agent_type: str = "full_pipeline"  # Options: trend_scout, script_writer, strategy, full_pipeline
+    target_url: Optional[str] = None  # Optional URL for web research
 
 class WaitlistEntry(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -57,34 +68,169 @@ class WaitlistCreate(BaseModel):
     platform: Optional[str] = None
     goal: str
 
-# ==================== AI AGENT ENDPOINT ====================
+class NewsletterSubscribe(BaseModel):
+    email: str
+    interest: Optional[str] = None
 
-@api_router.post("/agents/generate", response_model=AgentResponse)
-async def generate_content(request: AgentRequest):
+# ==================== AIRTOP AGENT SERVICE ====================
+
+async def run_airtop_agent(request: AirtopAgentRequest) -> dict:
     """
-    Single GPT-5.2 API call that simulates a multi-agent workflow.
-    Returns trends, ideas, hooks, script, and strategy all at once.
-    Falls back to mock data if LLM is unavailable.
+    Execute Airtop AI agent workflow.
+    All API calls are made server-side only.
+    API key is loaded from environment variable - NEVER exposed to client.
+    """
+    airtop_api_key = os.environ.get('AIRTOP_API_KEY')
+    
+    if not airtop_api_key:
+        raise HTTPException(
+            status_code=500, 
+            detail="Airtop API key not configured. Set AIRTOP_API_KEY in environment."
+        )
+    
+    try:
+        from airtop import AsyncAirtop
+        
+        # Initialize Airtop client with API key from environment
+        airtop_client = AsyncAirtop(api_key=airtop_api_key)
+        
+        # Create browser session
+        session = await airtop_client.sessions.create()
+        session_id = session.data.id
+        
+        try:
+            # Define prompts based on agent type
+            prompts = {
+                "trend_scout": f"""
+                    Research current viral trends for {request.niche} content on {request.platform}.
+                    Find:
+                    - Top 3 trending topics in this niche
+                    - Viral content formats working right now
+                    - Engagement patterns and best posting times
+                    Return as JSON with keys: trends (array), formats (array), insights (string)
+                """,
+                "script_writer": f"""
+                    Create a viral {request.content_type} script for {request.niche} on {request.platform}.
+                    Goal: {request.goal}
+                    Include:
+                    - Attention-grabbing hook (first 3 seconds)
+                    - Main content body with retention techniques
+                    - Strong call-to-action
+                    Return as JSON with keys: hook (string), body (string), cta (string), full_script (string)
+                """,
+                "strategy": f"""
+                    Create a content strategy for {request.niche} creator on {request.platform}.
+                    Goal: {request.goal}
+                    Include:
+                    - Content pillars (3-5 topics)
+                    - Posting schedule recommendation
+                    - Monetization opportunities
+                    - Growth tactics
+                    Return as JSON with keys: pillars (array), schedule (string), monetization (array), tactics (array)
+                """,
+                "full_pipeline": f"""
+                    Execute full content creation pipeline for {request.niche} on {request.platform}.
+                    Goal: {request.goal}
+                    Content type: {request.content_type}
+                    
+                    Provide:
+                    1. trends: Array of 3 current viral trends in this niche
+                    2. content_ideas: Array of 3 content ideas based on trends
+                    3. hooks: Array of 3 attention-grabbing hooks
+                    4. script: Complete script for the best idea (hook + body + CTA)
+                    5. strategy: Growth and monetization strategy summary
+                    
+                    Return as JSON with these exact keys.
+                """
+            }
+            
+            prompt = prompts.get(request.agent_type, prompts["full_pipeline"])
+            
+            # If target URL provided, navigate and extract
+            if request.target_url:
+                window = await airtop_client.windows.create(
+                    session_id=session_id,
+                    url=request.target_url
+                )
+                window_id = window.data.id
+                
+                # Use AI extraction with prompt
+                result = await airtop_client.windows.paginated_extraction(
+                    session_id=session_id,
+                    window_id=window_id,
+                    prompt=prompt
+                )
+            else:
+                # Use general AI prompt without specific URL
+                # Navigate to a research starting point
+                research_urls = {
+                    "YouTube": "https://www.youtube.com/feed/trending",
+                    "TikTok": "https://www.tiktok.com/discover",
+                    "Instagram": "https://www.instagram.com/explore/",
+                    "LinkedIn": "https://www.linkedin.com/feed/"
+                }
+                
+                target_url = research_urls.get(request.platform, "https://www.google.com")
+                
+                window = await airtop_client.windows.create(
+                    session_id=session_id,
+                    url=target_url
+                )
+                window_id = window.data.id
+                
+                # Execute AI agent with prompt
+                result = await airtop_client.windows.paginated_extraction(
+                    session_id=session_id,
+                    window_id=window_id,
+                    prompt=prompt
+                )
+            
+            # Parse and return results
+            return {
+                "success": True,
+                "data": result,
+                "session_id": session_id
+            }
+            
+        finally:
+            # Always cleanup session
+            try:
+                await airtop_client.sessions.terminate(session_id)
+            except Exception as cleanup_error:
+                logging.warning(f"Session cleanup error: {cleanup_error}")
+                
+    except ImportError:
+        raise HTTPException(
+            status_code=500,
+            detail="Airtop SDK not installed. Run: pip install airtop"
+        )
+    except Exception as e:
+        logging.error(f"Airtop agent error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Airtop agent error: {str(e)}")
+
+# ==================== OPENAI FALLBACK SERVICE ====================
+
+async def run_openai_agent(request: AgentRequest) -> AgentResponse:
+    """
+    Fallback to OpenAI/Emergent LLM when Airtop is not available.
+    API key loaded from environment - NEVER exposed to client.
     """
     try:
         from emergentintegrations.llm.chat import LlmChat, UserMessage
         
-        api_key = os.environ.get('EMERGENT_LLM_KEY')
-        if not api_key:
-            raise HTTPException(status_code=500, detail="LLM API key not configured")
+        # Try Emergent LLM key first, then OpenAI key
+        api_key = os.environ.get('EMERGENT_LLM_KEY') or os.environ.get('OPENAI_API_KEY')
         
-        # Initialize chat with GPT-5.2
+        if not api_key:
+            raise HTTPException(
+                status_code=500, 
+                detail="No LLM API key configured. Set EMERGENT_LLM_KEY or OPENAI_API_KEY."
+            )
+        
         chat = LlmChat(
             api_key=api_key,
             session_id=f"deployr-agent-{uuid.uuid4()}",
             system_message="""You are DeployrAI, a multi-agent content creation system. 
-You simulate 5 specialized agents working together:
-1. Trend Scout Agent - finds viral trends
-2. Idea Generator Agent - creates content ideas
-3. Hook Master Agent - writes attention-grabbing hooks
-4. Script Writer Agent - creates full scripts
-5. Strategy Agent - builds monetization/growth strategy
-
 Always respond in valid JSON format with these exact keys:
 {
   "trends": ["trend1", "trend2", "trend3"],
@@ -95,89 +241,127 @@ Always respond in valid JSON format with these exact keys:
 }"""
         ).with_model("openai", "gpt-5.2")
         
-        # Create the prompt
-        prompt = f"""Generate content for a creator with the following details:
+        prompt = f"""Generate content for a creator:
 - Niche: {request.niche}
 - Platform: {request.platform}
 - Goal: {request.goal}
 - Content Type: {request.content_type}
 
-Execute all 5 agents and return their outputs in JSON format:
-1. Find 3 current viral trends in this niche
-2. Generate 3 unique content ideas based on these trends
-3. Write 3 attention-grabbing hooks for the best idea
-4. Create a complete short-form script (30-60 seconds)
-5. Provide a growth and monetization strategy
-
-Return ONLY valid JSON, no markdown."""
+Return ONLY valid JSON with: trends, content_ideas, hooks, script, strategy."""
 
         user_message = UserMessage(text=prompt)
         response = await chat.send_message(user_message)
         
-        # Parse the JSON response
         import json
-        try:
-            # Clean up response if needed
-            response_text = response.strip()
-            if response_text.startswith("```json"):
-                response_text = response_text[7:]
-            if response_text.startswith("```"):
-                response_text = response_text[3:]
-            if response_text.endswith("```"):
-                response_text = response_text[:-3]
-            
-            data = json.loads(response_text.strip())
-            
-            return AgentResponse(
-                trends=data.get("trends", []),
-                content_ideas=data.get("content_ideas", []),
-                hooks=data.get("hooks", []),
-                script=data.get("script", ""),
-                strategy=data.get("strategy", "")
-            )
-        except json.JSONDecodeError:
-            # If JSON parsing fails, create structured response from text
-            return AgentResponse(
-                trends=["Trend analysis in progress"],
-                content_ideas=["Content ideation in progress"],
-                hooks=["Hook generation in progress"],
-                script=response[:500] if response else "Script generation in progress",
-                strategy="Strategy formulation in progress"
-            )
-            
-    except ImportError:
-        raise HTTPException(status_code=500, detail="LLM integration not installed")
-    except Exception as e:
-        error_msg = str(e)
-        logging.warning(f"LLM error, using fallback: {error_msg}")
+        response_text = response.strip()
+        if response_text.startswith("```"):
+            response_text = response_text.split("```")[1]
+            if response_text.startswith("json"):
+                response_text = response_text[4:]
         
-        # Provide intelligent fallback based on niche
-        niche = request.niche.lower()
-        platform = request.platform
+        data = json.loads(response_text.strip())
         
         return AgentResponse(
+            trends=data.get("trends", []),
+            content_ideas=data.get("content_ideas", []),
+            hooks=data.get("hooks", []),
+            script=data.get("script", ""),
+            strategy=data.get("strategy", ""),
+            source="openai"
+        )
+        
+    except Exception as e:
+        logging.warning(f"OpenAI fallback error: {str(e)}")
+        # Return mock data as last resort
+        return AgentResponse(
             trends=[
-                f"AI-generated {niche} content is trending on {platform}",
-                f"Behind-the-scenes {niche} content performs 3x better",
-                f"Short tutorials in {niche} getting high engagement"
+                f"AI-generated {request.niche} content is trending",
+                f"Behind-the-scenes {request.niche} content performs well",
+                f"Short tutorials in {request.niche} getting high engagement"
             ],
             content_ideas=[
-                f"Day in the life of a {niche} creator",
-                f"Tutorial: How I use AI for {niche} content",
-                f"AI vs Human {niche} content challenge"
+                f"Day in the life of a {request.niche} creator",
+                f"Tutorial: How I use AI for {request.niche}",
+                f"AI vs Human {request.niche} content challenge"
             ],
             hooks=[
-                f"What if AI could create your entire {niche} video?",
-                f"I let AI run my {niche} content for a week...",
-                f"The secret tool top {niche} creators are using"
+                f"What if AI could create your entire {request.niche} video?",
+                f"I let AI run my {request.niche} content for a week...",
+                f"The secret tool top {request.niche} creators are using"
             ],
-            script=f"""Hook: "What if I told you AI could 10x your {niche} content output?"
+            script=f"""Hook: "What if I told you AI could 10x your {request.niche} content output?"
 
-Body: Today I'm going to show you exactly how I use AI agents to create, plan, and even monetize my {niche} content. First, my Trend Scout agent found what's working NOW in the {niche} space on {platform}. Then my Script Writer turned that into this exact video you're watching.
+Body: Today I'm showing you how I use AI agents to create, plan, and monetize my {request.niche} content on {request.platform}.
 
-CTA: Drop a comment if you want to see more AI {niche} content creation tips! And follow for part 2.""",
-            strategy=f"Post 5x per week on {platform}, focus on short-form {niche} content. Monetize through brand deals, digital products, and affiliate marketing. Target watch time: 70%+. Engage in comments within first hour of posting."
+CTA: Follow for more AI {request.niche} tips!""",
+            strategy=f"Post 5x per week on {request.platform}, focus on {request.content_type}. Monetize through brand deals and digital products.",
+            source="fallback"
         )
+
+# ==================== API ENDPOINTS ====================
+
+@api_router.post("/agents/generate", response_model=AgentResponse)
+async def generate_content(request: AgentRequest):
+    """
+    Generate content using AI agents.
+    Uses Airtop if use_airtop=True and API key is configured.
+    Falls back to OpenAI/Emergent LLM otherwise.
+    
+    All API calls are made server-side. No keys exposed to client.
+    """
+    if request.use_airtop and os.environ.get('AIRTOP_API_KEY'):
+        try:
+            airtop_request = AirtopAgentRequest(
+                niche=request.niche,
+                platform=request.platform,
+                goal=request.goal,
+                content_type=request.content_type,
+                agent_type="full_pipeline"
+            )
+            result = await run_airtop_agent(airtop_request)
+            
+            if result.get("success") and result.get("data"):
+                data = result["data"]
+                return AgentResponse(
+                    trends=data.get("trends", []),
+                    content_ideas=data.get("content_ideas", []),
+                    hooks=data.get("hooks", []),
+                    script=data.get("script", ""),
+                    strategy=data.get("strategy", ""),
+                    source="airtop"
+                )
+        except Exception as e:
+            logging.warning(f"Airtop failed, falling back to OpenAI: {str(e)}")
+    
+    # Fallback to OpenAI
+    return await run_openai_agent(request)
+
+@api_router.post("/agents/airtop", response_model=dict)
+async def run_airtop_workflow(request: AirtopAgentRequest):
+    """
+    Dedicated Airtop agent endpoint for advanced workflows.
+    Requires AIRTOP_API_KEY environment variable.
+    
+    Agent types:
+    - trend_scout: Research viral trends
+    - script_writer: Generate scripts
+    - strategy: Create content strategy
+    - full_pipeline: Complete workflow
+    """
+    return await run_airtop_agent(request)
+
+@api_router.get("/agents/status")
+async def get_agent_status():
+    """
+    Check which AI services are configured and available.
+    Does NOT expose actual API keys.
+    """
+    return {
+        "airtop_configured": bool(os.environ.get('AIRTOP_API_KEY')),
+        "openai_configured": bool(os.environ.get('OPENAI_API_KEY')),
+        "emergent_configured": bool(os.environ.get('EMERGENT_LLM_KEY')),
+        "recommended": "airtop" if os.environ.get('AIRTOP_API_KEY') else "openai"
+    }
 
 # ==================== WAITLIST ENDPOINT ====================
 
@@ -195,6 +379,20 @@ async def get_waitlist_count():
     count = await db.waitlist.count_documents({})
     return {"count": count, "spots_remaining": max(0, 100 - count)}
 
+# ==================== NEWSLETTER ENDPOINT ====================
+
+@api_router.post("/newsletter")
+async def subscribe_newsletter(data: NewsletterSubscribe):
+    """Subscribe to newsletter"""
+    doc = {
+        "id": str(uuid.uuid4()),
+        "email": data.email,
+        "interest": data.interest,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+    await db.newsletter.insert_one(doc)
+    return {"success": True, "message": "Subscribed successfully"}
+
 # ==================== HEALTH CHECK ====================
 
 @api_router.get("/")
@@ -203,7 +401,14 @@ async def root():
 
 @api_router.get("/health")
 async def health_check():
-    return {"status": "healthy", "service": "DeployrAI"}
+    return {
+        "status": "healthy", 
+        "service": "DeployrAI",
+        "agents": {
+            "airtop": "configured" if os.environ.get('AIRTOP_API_KEY') else "not configured",
+            "openai": "configured" if os.environ.get('EMERGENT_LLM_KEY') or os.environ.get('OPENAI_API_KEY') else "not configured"
+        }
+    }
 
 # Include the router
 app.include_router(api_router)
