@@ -26,15 +26,21 @@ const HeroSection = ({ onApplyClick, onCommunityClick }) => {
         {/* Main Headline */}
         <h1 
           data-testid="hero-title"
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tighter text-white mb-8 font-outfit leading-[1.1] opacity-0 animate-fade-in-up"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tighter text-white mb-6 font-outfit leading-[1.1] opacity-0 animate-fade-in-up"
           style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}
         >
-          One Creator. Infinite Output.
-          <br />
           <span className="bg-gradient-to-r from-purple-400 via-violet-400 to-blue-400 bg-clip-text text-transparent">
-            AI Agents That Actually Ship.
+            The Creator's Unfair Advantage
           </span>
         </h1>
+
+        {/* Subheadline */}
+        <p 
+          className="text-lg sm:text-xl md:text-2xl text-zinc-300 mb-10 opacity-0 animate-fade-in-up max-w-2xl mx-auto"
+          style={{ animationDelay: '0.15s', animationFillMode: 'forwards' }}
+        >
+          AI agents that actually ship content, not just ideas.
+        </p>
 
         {/* CTA Buttons */}
         <div 
