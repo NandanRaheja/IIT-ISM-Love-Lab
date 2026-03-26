@@ -17,6 +17,7 @@ import AgentDemo from './components/AgentDemo';
 import LearnPage from './components/LearnPage';
 import FloatingLearnButton from './components/FloatingLearnButton';
 import WaitlistModal from './components/WaitlistModal';
+import FloatingChatbot from './components/FloatingChatbot';
 
 // WhatsApp community link (placeholder)
 const WHATSAPP_LINK = 'https://chat.whatsapp.com/placeholder-invite-link';
@@ -91,6 +92,9 @@ const HomePage = () => {
       
       {/* Floating Learn Button */}
       <FloatingLearnButton />
+      
+      {/* Floating AI Chatbot */}
+      <FloatingChatbot />
     </div>
   );
 };
