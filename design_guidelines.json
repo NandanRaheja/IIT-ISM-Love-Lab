@@ -1,115 +1,83 @@
 {
   "theme": "dark",
-  "archetype": "Archetype 5 (Jewel & Luxury / Futuristic Cinematic)",
+  "archetype": "7 (Electric & Neon) / 4 (Swiss Hybrid)",
+  "design_philosophy": "Premium, minimal, futuristic UI. Deep black (#0B0B0F) canvas with intentional, high-contrast purple and blue gradient glows. Glassmorphism cards with generous padding, 'Stripe/Notion AI' level of polish, emphasizing execution-first exclusivity.",
   "colors": {
     "background": "#0B0B0F",
-    "surface": "rgba(255, 255, 255, 0.02)",
-    "surface_hover": "rgba(255, 255, 255, 0.04)",
-    "border": "rgba(255, 255, 255, 0.08)",
-    "border_hover": "rgba(168, 85, 247, 0.4)",
-    "primary": "#A855F7",
+    "surface": "#12121A",
+    "surface_glass": "rgba(255, 255, 255, 0.02)",
+    "border": "rgba(255, 255, 255, 0.06)",
+    "border_hover": "rgba(139, 92, 246, 0.4)",
+    "primary": "#8B5CF6",
+    "primary_glow": "rgba(139, 92, 246, 0.5)",
     "secondary": "#3B82F6",
-    "gradient_glow": "linear-gradient(to right, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2))",
-    "text_main": "#FFFFFF",
-    "text_muted": "rgba(255, 255, 255, 0.6)",
-    "text_accent": "#D8B4FE"
+    "text_primary": "#FFFFFF",
+    "text_secondary": "#A1A1AA",
+    "gradient_accent": "linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%)"
   },
   "typography": {
-    "headings": {
-      "family": "Outfit",
-      "weight": "font-medium to font-bold",
-      "tracking": "tracking-tight"
-    },
-    "body": {
-      "family": "Manrope",
-      "weight": "font-normal",
-      "line_height": "leading-relaxed"
-    },
-    "labels": {
-      "family": "JetBrains Mono",
-      "weight": "font-medium",
-      "tracking": "tracking-widest",
-      "transform": "uppercase"
+    "heading_font": "Outfit",
+    "body_font": "Manrope",
+    "rules": {
+      "h1": "text-4xl sm:text-5xl lg:text-7xl font-semibold tracking-tighter text-white",
+      "h2": "text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight text-white",
+      "h3": "text-xl sm:text-2xl font-medium tracking-tight text-white",
+      "body": "text-base text-zinc-400 leading-relaxed",
+      "overline": "text-xs font-bold uppercase tracking-[0.2em] text-purple-400"
     }
   },
-  "spacing_and_layout": {
-    "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32",
-    "grid": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8",
-    "card_padding": "p-2",
-    "card_radius": "rounded-3xl",
-    "image_radius": "rounded-2xl"
+  "layout_spacing": {
+    "section_padding": "py-24 md:py-32",
+    "container": "max-w-7xl mx-auto px-6 md:px-8 lg:px-12",
+    "bento_grid": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
   },
   "components": {
-    "section_header": {
-      "alignment": "text-center",
-      "title_classes": "text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white mb-6",
-      "subtitle_classes": "text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-16",
-      "glow_effect": "absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-purple-500/20 blur-[120px] rounded-full pointer-events-none"
+    "buttons": {
+      "primary": "relative group overflow-hidden bg-white text-black rounded-full px-8 py-3.5 font-semibold transition-all hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(139,92,246,0.4)]",
+      "secondary": "bg-white/5 border border-white/10 text-white rounded-full px-8 py-3.5 font-medium hover:bg-white/10 transition-all",
+      "gradient_border": "relative p-[1px] bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"
     },
-    "video_card": {
-      "base_classes": "relative group bg-white/[0.02] border border-white/[0.08] backdrop-blur-xl rounded-3xl p-2 transition-all duration-500 hover:-translate-y-2 hover:border-purple-500/40 cursor-pointer overflow-hidden flex flex-col h-full",
-      "glow_hover": "hover:shadow-[0_0_40px_rgba(168,85,247,0.15)]",
-      "image_container": "relative w-full aspect-[4/5] sm:aspect-video lg:aspect-[4/5] rounded-2xl overflow-hidden mb-4",
-      "image_overlay": "absolute inset-0 bg-gradient-to-t from-[#0B0B0F] via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500",
-      "play_button": "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500 z-10 hover:bg-white/20",
-      "content_container": "absolute bottom-0 left-0 right-0 p-6 z-20 flex flex-col justify-end"
+    "cards": {
+      "glass": "bg-[#12121A]/80 backdrop-blur-xl border border-white/5 rounded-3xl p-8 hover:bg-white/[0.04] hover:border-purple-500/30 transition-all duration-500 relative overflow-hidden group"
     },
-    "tag_pill": {
-      "classes": "inline-flex items-center px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] md:text-xs font-medium tracking-widest uppercase text-white/70 backdrop-blur-md mb-3 w-fit transition-colors group-hover:bg-purple-500/10 group-hover:border-purple-500/30 group-hover:text-purple-200"
-    },
-    "video_modal": {
-      "overlay": "fixed inset-0 z-50 bg-[#0B0B0F]/95 backdrop-blur-2xl flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-300",
-      "overlay_active": "opacity-100 pointer-events-auto",
-      "container": "relative w-full max-w-5xl aspect-video bg-black rounded-2xl sm:rounded-3xl border border-white/10 overflow-hidden shadow-[0_0_100px_rgba(168,85,247,0.2)] scale-95 transition-transform duration-500",
-      "container_active": "scale-100",
-      "close_button": "absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+    "header": {
+      "style": "fixed top-0 w-full z-50 backdrop-blur-2xl bg-[#0B0B0F]/60 border-b border-white/5 transition-all duration-300"
     }
   },
+  "sections": {
+    "Hero": "Center-aligned content. Massive 'Outfit' heading. Background MUST have CSS radial gradients (deep purple/blue) glowing behind the text. Include dual CTAs: 'Apply for Early Access' (Primary) and 'Join WhatsApp Community' (Secondary).",
+    "Agents": "Grid of 6 bento cards. Content: Trend Scout, Retention Strategy, Viral Scriptwriter, Content Strategy, Monetization, Visual Story. Each needs a glowing Lucide icon, subtle glassmorphism, and a hover reveal effect (e.g., border glow).",
+    "HowItWorks": "3 steps (Apply, Get Selected, Deploy Agents). Render as horizontal cards or a vertical timeline connected by a glowing line.",
+    "WhyDeployrAI": "Focus on 'execution-first' differentiation. Use a two-column layout: left column sticky heading, right column scrolling key benefits with large numbers.",
+    "Results": "Showcase metrics (e.g., 10x output, faster execution) using text-5xl numbers in a visually dense, high-contrast block.",
+    "Community": "A prominent section with a dark-gradient background inviting users to the first wave. Include WhatsApp integration CTA.",
+    "WaitlistForm": "Sleek inline form or embedded Shadcn Form. Fields: Name, Email, Content Type, Platform, Goal. Inputs must be dark with `focus:ring-purple-500`.",
+    "OutputProof": "Showcase what users built using the system. Use the provided Pexels workspace image with a dark gradient overlay to blend into the #0B0B0F background.",
+    "Footer": "Minimalist, generous spacing (py-20), dark grey text.",
+    "ViralLoop": "Add a 'Share this' or 'Refer a Creator' floating widget or section near the waitlist confirmation."
+  },
   "media": {
-    "video_thumbnails": [
-      {
-        "url": "https://images.pexels.com/photos/7345169/pexels-photo-7345169.jpeg",
-        "title": "Neon Wave Simulation",
-        "tag": "AI-assisted workflow"
+    "image_urls": {
+      "hero_texture": {
+        "url": "https://images.unsplash.com/photo-1774256265076-90607c78bd07?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MjJ8MHwxfHNlYXJjaHwyfHxhYnN0cmFjdCUyMHB1cnBsZSUyMGJsdWUlMjBnbG93JTIwZGFya3xlbnwwfHx8fDE3NzQ1MDQ0MDN8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Abstract purple and black wavy lines to be used at low opacity (10-15%) to texture the background of the hero or form section."
       },
-      {
-        "url": "https://images.unsplash.com/photo-1762279388956-1c098163a2a8",
-        "title": "Digital Landscape Render",
-        "tag": "Script → Visual"
+      "output_proof": {
+        "url": "https://images.pexels.com/photos/5948347/pexels-photo-5948347.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Sleek creator desk setup with purple lighting. Use in the 'Built With the System' / Output Proof section."
       },
-      {
-        "url": "https://images.pexels.com/photos/4362515/pexels-photo-4362515.png",
-        "title": "Cinematic Character Design",
-        "tag": "Generative Character"
-      },
-      {
-        "url": "https://images.unsplash.com/photo-1762281602433-9deeaabb8981",
-        "title": "Abstract Swirl Dynamics",
-        "tag": "Real-time generation"
-      },
-      {
-        "url": "https://images.unsplash.com/photo-1729167318434-5cefa05fa3ad",
-        "title": "VFX Character Study",
-        "tag": "Visual → Output"
-      },
-      {
-        "url": "https://images.unsplash.com/photo-1770968476272-69e3e4af5df7",
-        "title": "Cyberpunk Particle Flow",
-        "tag": "Cinematic VFX"
+      "community_avatar": {
+        "url": "https://images.unsplash.com/photo-1602566356391-67f94029b0ca?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwzfHxjcmVhdGl2ZSUyMGZpbG1tYWtlciUyMHBvcnRyYWl0JTIwZGFya3xlbnwwfHx8fDE3NzQ1MDQzOTV8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Filmmaker portrait to be used as a thumbnail or avatar near the waitlist or community CTA to add social proof."
       }
-    ]
+    },
+    "icons": "lucide-react"
   },
-  "motion_and_interactions": {
-    "hover": "Cards lift (-translate-y-2), borders glow purple, play button scales up and fades in, tags highlight to purple.",
-    "modal_entry": "Overlay fades in, video container scales up from 0.95 to 1.0 with a smooth spring easing.",
-    "general": "Use Lucide React for icons (Play, X for close). Add `data-testid` to all interactive elements."
+  "animations": {
+    "hover": "Cards should translate-y-[-2px] and reveal a subtle glow. Use Tailwind group-hover.",
+    "scroll": "Staggered fade-in for grid items using Framer Motion (initial opacity 0, y 20).",
+    "tracing_beam": "Use a moving gradient border effect for the primary pricing or 'How it Works' cards."
   },
-  "instructions_to_main_agent": [
-    "Build a Next.js (or React) page section mapped to these guidelines.",
-    "Ensure all backgrounds use the #0B0B0F dark theme with purple/blue gradients overlaid using `bg-gradient-to-r from-purple-500/20 to-blue-500/20 blur-[100px]` behind the cards.",
-    "Map the 6 provided media URLs to the video cards.",
-    "Implement the modal to simply show an embedded placeholder video (e.g., YouTube/Vimeo iframe or an HTML5 <video> with a poster) or just an interactive 'Video Playing...' UI state.",
-    "Add `data-testid='video-card-{index}'`, `data-testid='video-modal'`, and `data-testid='close-modal-button'` for QA.",
-    "Implement glassmorphism rigorously: Use `bg-white/[0.02] backdrop-blur-xl border border-white/[0.08]` for surfaces."
-  ]
+  "testing": "All interactive elements (buttons, form inputs, links) MUST have a `data-testid` attribute (e.g., `data-testid=\"apply-early-access-button\"`).",
+  "instructions_to_main_agent": "Ensure you add `Outfit` and `Manrope` from Google Fonts to the HTML. Customize tailwind.config.js to include the custom colors and fonts. All sections should strictly follow the dark #0B0B0F base. Do not use generic Shadcn default borders (gray-200); override them with white/10 or white/5. Do not use `Inter` for headings."
 }
