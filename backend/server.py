@@ -54,10 +54,11 @@ class AirtopAgentRequest(BaseModel):
 
 class RetentionAgentRequest(BaseModel):
     """Request model for Retention Strategy Agent webhook"""
-    niche: str
-    platform: str = "YouTube"
-    content_type: str = "short-form video"
-    video_url: Optional[str] = None  # Optional video URL to analyze
+    audienceType: str  # Required: e.g., "general", "beginners", "experts"
+    platform: str  # Required: e.g., "YouTube", "TikTok"
+    topic: str  # Required: main topic/niche
+    creatorNiche: Optional[str] = None  # Optional: e.g., "fitness coaching", "tech reviews"
+    script: Optional[str] = None  # Optional: existing script text to analyze
 
 class WaitlistEntry(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -381,23 +382,21 @@ async def run_retention_agent(request: RetentionAgentRequest):
         )
     
     try:
-        # Prepare the payload for the webhook
-        payload = {
-            "niche": request.niche,
+        # Prepare the payload - try wrapping in 'data' or 'inputs' as Airtop may expect
+        inner_payload = {
+            "audienceType": request.audienceType,
             "platform": request.platform,
-            "content_type": request.content_type,
-            "video_url": request.video_url,
-            "prompt": f"""Analyze retention strategies for {request.niche} content on {request.platform}.
-            
-Provide:
-1. retention_hooks: Array of 3-5 techniques to hook viewers in the first 3 seconds
-2. engagement_tactics: Array of 3-5 tactics to maintain engagement throughout
-3. pacing_tips: Array of 3-5 tips for optimal content pacing
-4. cta_strategies: Array of 3-5 effective call-to-action strategies
-5. watch_time_tips: String with overall advice for maximizing watch time
-
-Return as JSON with these exact keys."""
+            "topic": request.topic
         }
+        
+        # Add optional fields if provided
+        if request.creatorNiche:
+            inner_payload["creatorNiche"] = request.creatorNiche
+        if request.script:
+            inner_payload["script"] = request.script
+        
+        # Try different payload formats that Airtop webhook might expect
+        payload = {"data": inner_payload}
         
         # Make the webhook request
         async with httpx.AsyncClient(timeout=120.0) as client:
@@ -409,6 +408,28 @@ Return as JSON with these exact keys."""
                     "Content-Type": "application/json"
                 }
             )
+            
+            # If data wrapper fails, try without wrapper
+            if response.status_code == 422:
+                response = await client.post(
+                    webhook_url,
+                    json=inner_payload,
+                    headers={
+                        "Authorization": f"Bearer {api_key}",
+                        "Content-Type": "application/json"
+                    }
+                )
+            
+            # If still fails, try with 'inputs' wrapper
+            if response.status_code == 422:
+                response = await client.post(
+                    webhook_url,
+                    json={"inputs": inner_payload},
+                    headers={
+                        "Authorization": f"Bearer {api_key}",
+                        "Content-Type": "application/json"
+                    }
+                )
             
             if response.status_code == 200:
                 data = response.json()
