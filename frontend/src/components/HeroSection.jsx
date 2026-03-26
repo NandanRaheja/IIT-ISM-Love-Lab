@@ -29,10 +29,10 @@ const HeroSection = ({ onApplyClick, onCommunityClick }) => {
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tighter text-white mb-8 font-outfit leading-[1.1] opacity-0 animate-fade-in-up"
           style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}
         >
-          Build Like a Team of 10
+          One Creator. Infinite Output.
           <br />
           <span className="bg-gradient-to-r from-purple-400 via-violet-400 to-blue-400 bg-clip-text text-transparent">
-            With AI Agents That Actually Work
+            AI Agents That Actually Ship.
           </span>
         </h1>
 
