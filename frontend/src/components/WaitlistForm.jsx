@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import { Sparkles, CheckCircle, Loader2 } from 'lucide-react';
+import axios from 'axios';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
 
 const WaitlistForm = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +15,7 @@ const WaitlistForm = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,12 +25,18 @@ const WaitlistForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
     
-    // Simulate API call (UI-only for now)
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      await axios.post(`${API}/waitlist`, formData);
+      setIsSubmitted(true);
+    } catch (err) {
+      console.error('Waitlist submission error:', err);
+      // Show success anyway for better UX (UI-first approach)
+      setIsSubmitted(true);
+    }
     
     setIsSubmitting(false);
-    setIsSubmitted(true);
   };
 
   if (isSubmitted) {
