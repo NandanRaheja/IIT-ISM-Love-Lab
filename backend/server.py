@@ -393,10 +393,7 @@ async def run_retention_agent(request: RetentionAgentRequest):
             }
         }
         
-        logging.info(f"Sending retention agent request: {payload}")
-        
-        # Make the webhook request
-        async with httpx.AsyncClient(timeout=120.0) as client:
+        async with httpx.AsyncClient(timeout=180.0) as client:
             response = await client.post(
                 webhook_url,
                 json=payload,
@@ -406,34 +403,20 @@ async def run_retention_agent(request: RetentionAgentRequest):
                 }
             )
             
-            logging.info(f"Retention webhook response: {response.status_code} - {response.text[:500]}")
-            
-            if response.status_code == 200:
-                data = response.json()
-                
-                # If we get an invocationId, we need to poll for results
-                if "invocationId" in data:
-                    invocation_id = data["invocationId"]
-                    # Return the invocation info - results will be async
-                    return {
-                        "success": True,
-                        "status": "processing",
-                        "invocationId": invocation_id,
-                        "message": "Agent is processing. Results will be available shortly.",
-                        "source": "airtop_retention_webhook"
-                    }
-                
-                return {
-                    "success": True,
-                    "data": data,
-                    "source": "airtop_retention_webhook"
-                }
-            else:
-                logging.error(f"Retention webhook error: {response.status_code} - {response.text}")
+            if response.status_code != 200:
                 raise HTTPException(
                     status_code=response.status_code,
                     detail=f"Retention agent error: {response.text}"
                 )
+            
+            data = response.json()
+            
+            # Return the response directly
+            return {
+                "success": True,
+                "data": data,
+                "source": "airtop_retention_webhook"
+            }
                 
     except httpx.TimeoutException:
         raise HTTPException(status_code=504, detail="Retention agent timeout. Please try again.")
