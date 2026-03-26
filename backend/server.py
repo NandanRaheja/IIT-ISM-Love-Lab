@@ -89,14 +89,14 @@ async def run_airtop_agent(request: AirtopAgentRequest) -> dict:
         )
     
     try:
-        from airtop import AsyncAirtop
+        from airtop import Airtop
         
         # Initialize Airtop client with API key from environment
-        airtop_client = AsyncAirtop(api_key=airtop_api_key)
+        airtop_client = Airtop(api_key=airtop_api_key)
         
         # Create browser session
-        session = await airtop_client.sessions.create()
-        session_id = session.data.id
+        session_response = airtop_client.sessions.create()
+        session_id = session_response.data.id
         
         try:
             # Define prompts based on agent type
@@ -146,56 +146,60 @@ async def run_airtop_agent(request: AirtopAgentRequest) -> dict:
             
             prompt = prompts.get(request.agent_type, prompts["full_pipeline"])
             
-            # If target URL provided, navigate and extract
-            if request.target_url:
-                window = await airtop_client.windows.create(
-                    session_id=session_id,
-                    url=request.target_url
-                )
-                window_id = window.data.id
-                
-                # Use AI extraction with prompt
-                result = await airtop_client.windows.paginated_extraction(
-                    session_id=session_id,
-                    window_id=window_id,
-                    prompt=prompt
-                )
-            else:
-                # Use general AI prompt without specific URL
-                # Navigate to a research starting point
-                research_urls = {
-                    "YouTube": "https://www.youtube.com/feed/trending",
-                    "TikTok": "https://www.tiktok.com/discover",
-                    "Instagram": "https://www.instagram.com/explore/",
-                    "LinkedIn": "https://www.linkedin.com/feed/"
-                }
-                
-                target_url = research_urls.get(request.platform, "https://www.google.com")
-                
-                window = await airtop_client.windows.create(
-                    session_id=session_id,
-                    url=target_url
-                )
-                window_id = window.data.id
-                
-                # Execute AI agent with prompt
-                result = await airtop_client.windows.paginated_extraction(
-                    session_id=session_id,
-                    window_id=window_id,
-                    prompt=prompt
-                )
+            # Research URLs - use Google search for better results
+            search_query = f"{request.niche} {request.platform} viral trends 2026"
+            target_url = request.target_url or f"https://www.google.com/search?q={search_query.replace(' ', '+')}"
+            
+            # Create window and navigate
+            window_response = airtop_client.windows.create(
+                session_id=session_id,
+                url=target_url
+            )
+            window_id = window_response.data.window_id
+            
+            # Execute AI agent with prompt using prompt_content
+            result = airtop_client.windows.prompt_content(
+                session_id=session_id,
+                window_id=window_id,
+                prompt=prompt
+            )
             
             # Parse and return results
-            return {
-                "success": True,
-                "data": result,
-                "session_id": session_id
-            }
+            import json
+            try:
+                # Try to parse as JSON
+                content = result.data.model_response if hasattr(result.data, 'model_response') else str(result.data)
+                if isinstance(content, str):
+                    # Clean up potential JSON in string
+                    content = content.strip()
+                    if content.startswith("```json"):
+                        content = content[7:]
+                    if content.startswith("```"):
+                        content = content[3:]
+                    if content.endswith("```"):
+                        content = content[:-3]
+                    parsed_data = json.loads(content.strip())
+                else:
+                    parsed_data = content
+                    
+                return {
+                    "success": True,
+                    "data": parsed_data,
+                    "session_id": session_id,
+                    "source": "airtop"
+                }
+            except json.JSONDecodeError:
+                return {
+                    "success": True,
+                    "data": {"raw_response": str(result.data)},
+                    "session_id": session_id,
+                    "source": "airtop"
+                }
             
         finally:
             # Always cleanup session
             try:
-                await airtop_client.sessions.terminate(session_id)
+                airtop_client.sessions.terminate(session_id)
             except Exception as cleanup_error:
                 logging.warning(f"Session cleanup error: {cleanup_error}")
                 
