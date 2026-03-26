@@ -7,7 +7,8 @@ import {
   DollarSign, 
   Sparkles,
   Lock,
-  Play
+  Play,
+  Clock
 } from 'lucide-react';
 import TrendScoutModal from './TrendScoutModal';
 import RetentionAgentModal from './RetentionAgentModal';
@@ -34,24 +35,24 @@ const agents = [
     description: 'Creates high-retention scripts with proven hooks and payoffs',
     icon: Pen,
     color: 'from-violet-500 to-purple-500',
-    isActive: false,
-    modalType: null
+    isActive: true,
+    modalType: 'coming_soon'
   },
   {
     name: 'Content Strategy Expert',
     description: 'Builds intelligent posting plans aligned with your goals',
     icon: LayoutGrid,
     color: 'from-indigo-500 to-blue-500',
-    isActive: false,
-    modalType: null
+    isActive: true,
+    modalType: 'coming_soon'
   },
   {
     name: 'Monetization Agent',
     description: 'Turns content into income with strategic revenue paths',
     icon: DollarSign,
     color: 'from-emerald-500 to-teal-500',
-    isActive: false,
-    modalType: null
+    isActive: true,
+    modalType: 'coming_soon'
   },
   {
     name: 'Visual Story Agent',
@@ -59,6 +60,7 @@ const agents = [
     icon: Sparkles,
     color: 'from-pink-500 to-rose-500',
     isActive: false,
+    isComingSoon: true,
     modalType: null
   }
 ];
@@ -66,12 +68,16 @@ const agents = [
 const AgentsSection = () => {
   const [isTrendScoutOpen, setIsTrendScoutOpen] = useState(false);
   const [isRetentionOpen, setIsRetentionOpen] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(false);
 
   const handleAgentClick = (agent) => {
     if (agent.modalType === 'trend_scout') {
       setIsTrendScoutOpen(true);
     } else if (agent.modalType === 'retention') {
       setIsRetentionOpen(true);
+    } else if (agent.modalType === 'coming_soon') {
+      setShowComingSoon(true);
+      setTimeout(() => setShowComingSoon(false), 3000);
     }
   };
 
@@ -112,18 +118,26 @@ const AgentsSection = () => {
               data-testid={`agent-card-${index}`}
               onClick={() => handleAgentClick(agent)}
               className={`group bg-[#12121A]/80 backdrop-blur-xl border border-white/5 rounded-3xl p-8 hover:bg-white/[0.04] hover:border-purple-500/30 transition-all duration-500 relative overflow-hidden opacity-0 animate-fade-in-up ${
-                agent.isActive ? 'cursor-pointer' : 'cursor-default'
+                agent.isActive || agent.isComingSoon ? 'cursor-pointer' : 'cursor-default'
               }`}
               style={{ animationDelay: `${index * 0.1}s`, animationFillMode: 'forwards' }}
             >
               {/* Glow effect on hover */}
               <div className={`absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br ${agent.color} rounded-full blur-[80px] opacity-0 group-hover:opacity-30 transition-opacity duration-500`} />
               
-              {/* Active badge for Trend Scout */}
-              {agent.isActive && (
+              {/* Live badge for active agents */}
+              {agent.isActive && !agent.isComingSoon && (
                 <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 bg-green-500/20 border border-green-500/30 rounded-full">
                   <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
                   <span className="text-xs text-green-400 font-medium">Live</span>
+                </div>
+              )}
+
+              {/* Coming Soon badge for last agent */}
+              {agent.isComingSoon && (
+                <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/20 border border-amber-500/30 rounded-full">
+                  <Clock className="w-3 h-3 text-amber-400" />
+                  <span className="text-xs text-amber-400 font-medium">Coming Soon</span>
                 </div>
               )}
               
@@ -142,16 +156,39 @@ const AgentsSection = () => {
                 {agent.description}
               </p>
 
-              {/* Try button for active agents */}
-              {agent.isActive && (
+              {/* Try Now button for active agents */}
+              {agent.isActive && !agent.isComingSoon && (
                 <div className="flex items-center gap-2 text-sm text-purple-400 group-hover:text-purple-300 transition-colors">
                   <Play className="w-4 h-4" />
                   <span>Try Now</span>
                 </div>
               )}
+
+              {/* Coming Soon text for last agent */}
+              {agent.isComingSoon && (
+                <div className="flex items-center gap-2 text-sm text-amber-400/70">
+                  <Clock className="w-4 h-4" />
+                  <span>Launching Soon</span>
+                </div>
+              )}
             </div>
           ))}
         </div>
+
+        {/* Coming Soon Toast */}
+        {showComingSoon && (
+          <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-[#12121A] border border-purple-500/30 rounded-2xl px-6 py-4 shadow-[0_0_40px_rgba(139,92,246,0.3)] animate-fade-in-up">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-purple-400" />
+              </div>
+              <div>
+                <p className="text-white font-medium">Coming Soon!</p>
+                <p className="text-sm text-zinc-400">This agent is currently in development.</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* CTA */}
         <div className="mt-12 text-center">
