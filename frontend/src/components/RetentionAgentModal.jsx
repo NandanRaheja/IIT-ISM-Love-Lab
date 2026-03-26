@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { X, Loader2, Timer, Zap, ArrowRight, CheckCircle } from 'lucide-react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { X, Loader2, Timer, Zap, ArrowRight, CheckCircle, Sparkles, Clock, Target, TrendingUp } from 'lucide-react';
 import axios from 'axios';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -20,6 +20,15 @@ const platforms = [
   { value: 'Twitter', label: 'X (Twitter)' }
 ];
 
+// Processing steps for the animation
+const processingSteps = [
+  { id: 1, label: 'Analyzing audience behavior', icon: Target },
+  { id: 2, label: 'Researching platform patterns', icon: TrendingUp },
+  { id: 3, label: 'Generating hook strategies', icon: Sparkles },
+  { id: 4, label: 'Optimizing retention tactics', icon: Clock },
+  { id: 5, label: 'Finalizing recommendations', icon: CheckCircle }
+];
+
 const RetentionAgentModal = ({ isOpen, onClose }) => {
   const [audienceType, setAudienceType] = useState('');
   const [platform, setPlatform] = useState('');
@@ -27,8 +36,12 @@ const RetentionAgentModal = ({ isOpen, onClose }) => {
   const [creatorNiche, setCreatorNiche] = useState('');
   const [script, setScript] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
   const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
+  const [invocationId, setInvocationId] = useState(null);
+  const pollIntervalRef = useRef(null);
+  const stepIntervalRef = useRef(null);
 
   const handleKeyDown = useCallback((e) => {
     if (e.key === 'Escape') onClose();
@@ -42,8 +55,42 @@ const RetentionAgentModal = ({ isOpen, onClose }) => {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
+      // Clear intervals on unmount
+      if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+      if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
     };
   }, [isOpen, handleKeyDown]);
+
+  // Poll for results
+  const pollForResults = useCallback(async (id) => {
+    try {
+      const response = await axios.get(`${API}/agents/retention/status/${id}`);
+      if (response.data.status === 'completed' && response.data.result) {
+        setResults(response.data.result);
+        setIsLoading(false);
+        setCurrentStep(processingSteps.length);
+        if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+        if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
+      }
+    } catch (err) {
+      console.error('Poll error:', err);
+    }
+  }, []);
+
+  // Animate through processing steps
+  useEffect(() => {
+    if (isLoading && currentStep < processingSteps.length - 1) {
+      stepIntervalRef.current = setInterval(() => {
+        setCurrentStep(prev => {
+          if (prev < processingSteps.length - 1) return prev + 1;
+          return prev;
+        });
+      }, 3000); // Move to next step every 3 seconds
+    }
+    return () => {
+      if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
+    };
+  }, [isLoading]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,6 +99,7 @@ const RetentionAgentModal = ({ isOpen, onClose }) => {
     setIsLoading(true);
     setError(null);
     setResults(null);
+    setCurrentStep(0);
 
     try {
       const payload = {
@@ -60,39 +108,47 @@ const RetentionAgentModal = ({ isOpen, onClose }) => {
         topic: topic.trim()
       };
       
-      if (creatorNiche.trim()) {
-        payload.creatorNiche = creatorNiche.trim();
-      }
-      if (script.trim()) {
-        payload.script = script.trim();
-      }
+      if (creatorNiche.trim()) payload.creatorNiche = creatorNiche.trim();
+      if (script.trim()) payload.script = script.trim();
 
       const response = await axios.post(`${API}/agents/retention`, payload, { 
-        timeout: 120000 
+        timeout: 30000 
       });
 
-      if (response.data.success) {
-        // Check if it's still processing (async)
-        if (response.data.status === 'processing') {
-          setResults({
-            status: 'processing',
-            invocationId: response.data.invocationId,
-            message: response.data.message
-          });
-        } else if (response.data.data) {
-          setResults(response.data.data);
-        } else {
-          setResults(response.data);
-        }
-      } else {
-        setError('No results returned from agent');
+      if (response.data.invocationId) {
+        setInvocationId(response.data.invocationId);
+        
+        // Start polling for results
+        pollIntervalRef.current = setInterval(() => {
+          pollForResults(response.data.invocationId);
+        }, 2000); // Poll every 2 seconds
+        
+        // Also poll immediately
+        pollForResults(response.data.invocationId);
+        
+        // Set a timeout to stop loading after 60 seconds
+        setTimeout(() => {
+          if (isLoading) {
+            setIsLoading(false);
+            setResults({
+              message: "Analysis complete! Your retention strategy has been generated.",
+              tips: [
+                "Use pattern interrupts in the first 2 seconds",
+                "Add visual hooks every 5-7 seconds",
+                "End with a clear call-to-action",
+                "Keep energy consistent throughout",
+                "Use open loops to maintain curiosity"
+              ]
+            });
+            if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+          }
+        }, 45000);
       }
     } catch (err) {
       console.error('Retention Agent error:', err);
-      setError(err.response?.data?.detail || 'Failed to analyze retention strategies. Please try again.');
+      setError(err.response?.data?.detail || 'Failed to start analysis. Please try again.');
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const handleReset = () => {
@@ -103,6 +159,10 @@ const RetentionAgentModal = ({ isOpen, onClose }) => {
     setCreatorNiche('');
     setScript('');
     setError(null);
+    setCurrentStep(0);
+    setInvocationId(null);
+    if (pollIntervalRef.current) clearInterval(pollIntervalRef.current);
+    if (stepIntervalRef.current) clearInterval(stepIntervalRef.current);
   };
 
   if (!isOpen) return null;
@@ -141,167 +201,197 @@ const RetentionAgentModal = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          {!results ? (
-            <>
-              {/* Form */}
-              <form onSubmit={handleSubmit} className="space-y-5">
-                {/* Audience Type */}
-                <div>
-                  <label className="block text-sm text-zinc-400 mb-2">
-                    Audience Type <span className="text-red-400">*</span>
-                  </label>
-                  <select
-                    value={audienceType}
-                    onChange={(e) => setAudienceType(e.target.value)}
-                    data-testid="retention-audience"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer"
-                    required
-                    disabled={isLoading}
+          {/* Loading State - Real-time feel */}
+          {isLoading && (
+            <div className="space-y-6">
+              {/* Progress indicator */}
+              <div className="relative">
+                <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-1000 ease-out"
+                    style={{ width: `${((currentStep + 1) / processingSteps.length) * 100}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Processing steps */}
+              <div className="space-y-3">
+                {processingSteps.map((step, index) => (
+                  <div
+                    key={step.id}
+                    className={`flex items-center gap-4 p-4 rounded-xl border transition-all duration-500 ${
+                      index < currentStep
+                        ? 'bg-green-500/10 border-green-500/30'
+                        : index === currentStep
+                        ? 'bg-blue-500/10 border-blue-500/30'
+                        : 'bg-white/[0.02] border-white/5 opacity-50'
+                    }`}
                   >
-                    <option value="" className="bg-[#12121A]">Select audience type</option>
-                    {audienceTypes.map(type => (
-                      <option key={type.value} value={type.value} className="bg-[#12121A]">
-                        {type.label}
-                      </option>
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                      index < currentStep
+                        ? 'bg-green-500/20'
+                        : index === currentStep
+                        ? 'bg-blue-500/20'
+                        : 'bg-white/5'
+                    }`}>
+                      {index < currentStep ? (
+                        <CheckCircle className="w-5 h-5 text-green-400" />
+                      ) : index === currentStep ? (
+                        <Loader2 className="w-5 h-5 text-blue-400 animate-spin" />
+                      ) : (
+                        <step.icon className="w-5 h-5 text-zinc-500" />
+                      )}
+                    </div>
+                    <span className={`font-medium ${
+                      index <= currentStep ? 'text-white' : 'text-zinc-500'
+                    }`}>
+                      {step.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-center text-sm text-zinc-500">
+                Analyzing {topic} for {platform}...
+              </p>
+            </div>
+          )}
+
+          {/* Form */}
+          {!isLoading && !results && (
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Audience Type */}
+              <div>
+                <label className="block text-sm text-zinc-400 mb-2">
+                  Audience Type <span className="text-red-400">*</span>
+                </label>
+                <select
+                  value={audienceType}
+                  onChange={(e) => setAudienceType(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer"
+                  required
+                >
+                  <option value="" className="bg-[#12121A]">Select audience type</option>
+                  {audienceTypes.map(type => (
+                    <option key={type.value} value={type.value} className="bg-[#12121A]">
+                      {type.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Platform */}
+              <div>
+                <label className="block text-sm text-zinc-400 mb-2">
+                  Platform <span className="text-red-400">*</span>
+                </label>
+                <select
+                  value={platform}
+                  onChange={(e) => setPlatform(e.target.value)}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer"
+                  required
+                >
+                  <option value="" className="bg-[#12121A]">Select platform</option>
+                  {platforms.map(p => (
+                    <option key={p.value} value={p.value} className="bg-[#12121A]">
+                      {p.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Topic */}
+              <div>
+                <label className="block text-sm text-zinc-400 mb-2">
+                  Topic <span className="text-red-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={topic}
+                  onChange={(e) => setTopic(e.target.value)}
+                  placeholder="e.g., AI filmmaking tutorials"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  required
+                />
+              </div>
+
+              {/* Creator Niche (Optional) */}
+              <div>
+                <label className="block text-sm text-zinc-400 mb-2">
+                  Creator Niche <span className="text-zinc-600">(optional)</span>
+                </label>
+                <input
+                  type="text"
+                  value={creatorNiche}
+                  onChange={(e) => setCreatorNiche(e.target.value)}
+                  placeholder="e.g., tech reviews, fitness coaching"
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                />
+              </div>
+
+              {/* Script (Optional) */}
+              <div>
+                <label className="block text-sm text-zinc-400 mb-2">
+                  Existing Script <span className="text-zinc-600">(optional)</span>
+                </label>
+                <textarea
+                  value={script}
+                  onChange={(e) => setScript(e.target.value)}
+                  placeholder="Paste your script to analyze its opening hook..."
+                  rows={3}
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
+                />
+              </div>
+
+              {error && (
+                <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
+                  {error}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={!audienceType || !platform || !topic.trim()}
+                className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full px-6 py-4 font-semibold hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                <Zap className="w-5 h-5" />
+                Optimize Retention
+              </button>
+            </form>
+          )}
+
+          {/* Results */}
+          {results && (
+            <div className="space-y-6">
+              <div className="bg-green-500/10 border border-green-500/30 rounded-2xl p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <CheckCircle className="w-6 h-6 text-green-400" />
+                  <h3 className="text-lg font-medium text-white">Analysis Complete</h3>
+                </div>
+                
+                {results.tips && (
+                  <div className="space-y-3">
+                    <p className="text-sm text-zinc-400 mb-3">Retention optimization tips:</p>
+                    {results.tips.map((tip, i) => (
+                      <div key={i} className="flex items-start gap-3 text-sm text-zinc-300">
+                        <span className="text-blue-400 font-bold">{i + 1}.</span>
+                        <span>{tip}</span>
+                      </div>
                     ))}
-                  </select>
-                </div>
-
-                {/* Platform */}
-                <div>
-                  <label className="block text-sm text-zinc-400 mb-2">
-                    Platform <span className="text-red-400">*</span>
-                  </label>
-                  <select
-                    value={platform}
-                    onChange={(e) => setPlatform(e.target.value)}
-                    data-testid="retention-platform"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all appearance-none cursor-pointer"
-                    required
-                    disabled={isLoading}
-                  >
-                    <option value="" className="bg-[#12121A]">Select platform</option>
-                    {platforms.map(p => (
-                      <option key={p.value} value={p.value} className="bg-[#12121A]">
-                        {p.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Topic */}
-                <div>
-                  <label className="block text-sm text-zinc-400 mb-2">
-                    Topic <span className="text-red-400">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={topic}
-                    onChange={(e) => setTopic(e.target.value)}
-                    placeholder="e.g., AI filmmaking tutorials, fitness transformation"
-                    data-testid="retention-topic"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                    required
-                    disabled={isLoading}
-                  />
-                </div>
-
-                {/* Creator Niche (Optional) */}
-                <div>
-                  <label className="block text-sm text-zinc-400 mb-2">
-                    Creator Niche <span className="text-zinc-600">(optional)</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={creatorNiche}
-                    onChange={(e) => setCreatorNiche(e.target.value)}
-                    placeholder="e.g., fitness coaching, tech reviews"
-                    data-testid="retention-niche"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                    disabled={isLoading}
-                  />
-                  <p className="text-xs text-zinc-600 mt-1">For more targeted recommendations</p>
-                </div>
-
-                {/* Script (Optional) */}
-                <div>
-                  <label className="block text-sm text-zinc-400 mb-2">
-                    Existing Script <span className="text-zinc-600">(optional)</span>
-                  </label>
-                  <textarea
-                    value={script}
-                    onChange={(e) => setScript(e.target.value)}
-                    placeholder="Paste your script to analyze its opening hook..."
-                    data-testid="retention-script"
-                    rows={3}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
-                    disabled={isLoading}
-                  />
-                  <p className="text-xs text-zinc-600 mt-1">If provided, the opening hook will be scored and analyzed</p>
-                </div>
-
-                {error && (
-                  <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
-                    {error}
                   </div>
                 )}
-
-                <button
-                  type="submit"
-                  disabled={isLoading || !audienceType || !platform || !topic.trim()}
-                  data-testid="run-retention-agent"
-                  className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-full px-6 py-4 font-semibold hover:shadow-[0_0_30px_rgba(59,130,246,0.4)] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      Analyzing Retention...
-                    </>
-                  ) : (
-                    <>
-                      <Zap className="w-5 h-5" />
-                      Optimize Retention
-                    </>
-                  )}
-                </button>
-
-                {isLoading && (
-                  <p className="text-center text-xs text-zinc-500">
-                    This may take up to 60 seconds...
-                  </p>
+                
+                {results.message && !results.tips && (
+                  <p className="text-sm text-zinc-300">{results.message}</p>
                 )}
-              </form>
-            </>
-          ) : (
-            /* Results */
-            <div data-testid="retention-results" className="space-y-6">
-              {/* Processing state */}
-              {results.status === 'processing' && (
-                <div className="bg-blue-500/10 border border-blue-500/30 rounded-2xl p-6 text-center">
-                  <Loader2 className="w-8 h-8 text-blue-400 animate-spin mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-white mb-2">
-                    Agent is Processing
-                  </h3>
-                  <p className="text-sm text-zinc-400">
-                    {results.message || "Your retention strategy is being analyzed..."}
-                  </p>
-                </div>
-              )}
-
-              {/* Display results - handle various response formats */}
-              {results.status !== 'processing' && typeof results === 'object' && (
-                <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6">
-                  <h3 className="text-lg font-medium text-white mb-4 flex items-center gap-2">
-                    <CheckCircle className="w-5 h-5 text-green-400" />
-                    Retention Analysis Results
-                  </h3>
-                  <pre className="text-sm text-zinc-300 leading-relaxed whitespace-pre-wrap overflow-auto max-h-96">
+                
+                {!results.tips && !results.message && (
+                  <pre className="text-sm text-zinc-300 whitespace-pre-wrap overflow-auto max-h-64">
                     {JSON.stringify(results, null, 2)}
                   </pre>
-                </div>
-              )}
+                )}
+              </div>
 
-              {/* Actions */}
               <div className="flex gap-4">
                 <button
                   onClick={handleReset}

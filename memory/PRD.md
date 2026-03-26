@@ -43,10 +43,10 @@ Build a premium, high-converting landing page for DeployrAI - an AI automation p
 ## What's Been Implemented (Dec 2025)
 
 ### Phase 1 - Output Proof Section
-- Created VideoCard, VideoModal components
+- Created VideoCard, VideoModal components with YouTube embeds + fallbacks
 - Implemented glassmorphism card design
 - Added hover animations and play button overlays
-- 6 cinematic video thumbnails
+- 6 cinematic video thumbnails with real YouTube content
 
 ### Phase 2 - Full Landing Page
 - Built all 12 landing page sections
@@ -56,18 +56,37 @@ Build a premium, high-converting landing page for DeployrAI - an AI automation p
 - Added mobile responsive design
 - Implemented navigation and smooth scroll
 
+### Phase 3 - Airtop AI Agents Integration
+- **Trend Scout Agent** (synchronous) - Live modal with real-time results
+- **Retention Strategy Agent** (async webhook) - Real-time UI polling system
+  - `POST /api/agents/retention` - Triggers Airtop webhook, returns invocationId
+  - `POST /api/agents/retention/callback` - Receives Airtop results
+  - `GET /api/agents/retention/status/{id}` - Frontend polls for completion
+  - Beautiful processing animation with step-by-step progress
+- Custom DeployrAI SVG logo (three vertical lines)
+- "Learn the System" floating button with documentation page
+
+### Phase 4 - Callback/Polling Flow (Mar 2026)
+- ✅ Backend callback endpoint stores results in MongoDB
+- ✅ Frontend polling every 2 seconds for status updates
+- ✅ 45-second timeout with fallback results
+- ✅ Processing animation with 5 visual steps
+- ✅ Results display with tips array formatting
+
 ## Prioritized Backlog
 
 ### P0 - Critical
 - [x] Core landing page structure
 - [x] Working AI agent endpoint
 - [x] Waitlist form submission
+- [x] Trend Scout Agent (Airtop) integration
+- [x] Retention Strategy Agent with real-time UI
 
 ### P1 - High Priority
-- [ ] Connect AgentDemo to backend API (currently uses fallback)
+- [ ] Integrate remaining Airtop agents (Script Writer, Strategy Agent) - awaiting webhook URLs
+- [ ] Replace placeholder WhatsApp community links with real link
 - [ ] Add email notifications for waitlist
 - [ ] Implement referral tracking system
-- [ ] Add analytics (Google Analytics/Mixpanel)
 
 ### P2 - Nice to Have
 - [ ] A/B testing for CTAs
@@ -75,10 +94,11 @@ Build a premium, high-converting landing page for DeployrAI - an AI automation p
 - [ ] Testimonials section
 - [ ] Pricing page
 - [ ] User dashboard for accepted creators
+- [ ] Add analytics (Google Analytics/Mixpanel)
 
 ## Next Tasks
-1. Replace placeholder WhatsApp link with real invite
-2. Add actual video content URLs to Output Proof section
+1. **P1:** Replace placeholder WhatsApp link with real invite (awaiting from user)
+2. **P1:** Integrate remaining Airtop agents when webhook endpoints are provided
 3. Set up email notifications for new waitlist entries
 4. Implement referral tracking with unique codes
 5. Add Google Analytics for conversion tracking

@@ -366,9 +366,7 @@ async def run_airtop_workflow(request: AirtopAgentRequest):
 async def run_retention_agent(request: RetentionAgentRequest):
     """
     Retention Strategy Agent - uses Airtop webhook endpoint.
-    Optimizes watch time and engagement strategies.
-    
-    API key loaded from environment - NEVER exposed to client.
+    Stores invocationId for callback results.
     """
     import httpx
     
@@ -378,11 +376,10 @@ async def run_retention_agent(request: RetentionAgentRequest):
     if not webhook_url or not api_key:
         raise HTTPException(
             status_code=500,
-            detail="Retention agent not configured. Set AIRTOP_RETENTION_WEBHOOK and AIRTOP_RETENTION_API_KEY."
+            detail="Retention agent not configured."
         )
     
     try:
-        # Prepare payload with configVars wrapper as Airtop expects
         payload = {
             "configVars": {
                 "audienceType": request.audienceType,
@@ -393,7 +390,7 @@ async def run_retention_agent(request: RetentionAgentRequest):
             }
         }
         
-        async with httpx.AsyncClient(timeout=180.0) as client:
+        async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.post(
                 webhook_url,
                 json=payload,
@@ -404,25 +401,76 @@ async def run_retention_agent(request: RetentionAgentRequest):
             )
             
             if response.status_code != 200:
-                raise HTTPException(
-                    status_code=response.status_code,
-                    detail=f"Retention agent error: {response.text}"
-                )
+                raise HTTPException(status_code=response.status_code, detail=response.text)
             
             data = response.json()
+            invocation_id = data.get("invocationId")
             
-            # Return the response directly
+            if invocation_id:
+                # Store pending invocation in DB
+                await db.agent_invocations.update_one(
+                    {"invocationId": invocation_id},
+                    {
+                        "$set": {
+                            "invocationId": invocation_id,
+                            "status": "processing",
+                            "request": payload["configVars"],
+                            "created_at": datetime.now(timezone.utc).isoformat()
+                        }
+                    },
+                    upsert=True
+                )
+            
             return {
                 "success": True,
-                "data": data,
-                "source": "airtop_retention_webhook"
+                "invocationId": invocation_id,
+                "status": "processing"
             }
                 
-    except httpx.TimeoutException:
-        raise HTTPException(status_code=504, detail="Retention agent timeout. Please try again.")
     except Exception as e:
         logging.error(f"Retention agent error: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Retention agent error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/agents/retention/callback")
+async def retention_callback(request: dict):
+    """
+    Callback endpoint for Airtop to send results.
+    """
+    invocation_id = request.get("invocationId")
+    if not invocation_id:
+        raise HTTPException(status_code=400, detail="Missing invocationId")
+    
+    await db.agent_invocations.update_one(
+        {"invocationId": invocation_id},
+        {
+            "$set": {
+                "status": "completed",
+                "result": request.get("result") or request.get("data") or request,
+                "completed_at": datetime.now(timezone.utc).isoformat()
+            }
+        }
+    )
+    
+    return {"success": True}
+
+@api_router.get("/agents/retention/status/{invocation_id}")
+async def get_retention_status(invocation_id: str):
+    """
+    Poll for retention agent results.
+    """
+    doc = await db.agent_invocations.find_one(
+        {"invocationId": invocation_id},
+        {"_id": 0}
+    )
+    
+    if not doc:
+        return {"status": "not_found"}
+    
+    return {
+        "status": doc.get("status", "processing"),
+        "result": doc.get("result"),
+        "created_at": doc.get("created_at")
+    }
 
 @api_router.get("/agents/status")
 async def get_agent_status():
