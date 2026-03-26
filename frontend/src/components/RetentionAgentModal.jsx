@@ -282,14 +282,8 @@ const RetentionAgentModal = ({ isOpen, onClose }) => {
                   <h3 className="text-lg font-medium text-white mb-2">
                     Agent is Processing
                   </h3>
-                  <p className="text-sm text-zinc-400 mb-4">
+                  <p className="text-sm text-zinc-400">
                     {results.message || "Your retention strategy is being analyzed..."}
-                  </p>
-                  <p className="text-xs text-zinc-500">
-                    Invocation ID: {results.invocationId}
-                  </p>
-                  <p className="text-xs text-zinc-500 mt-2">
-                    The agent is running. Results will appear in your Airtop dashboard.
                   </p>
                 </div>
               )}
